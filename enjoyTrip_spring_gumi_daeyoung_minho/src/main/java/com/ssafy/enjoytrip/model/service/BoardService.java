@@ -1,18 +1,20 @@
 package com.ssafy.enjoytrip.model.service;
 
-import java.util.List;
+import java.util.Map;
 
-import com.ssafy.enjoytrip.model.Board;
+import com.ssafy.enjoytrip.model.BoardDto;
+import com.ssafy.enjoytrip.model.BoardListDto;
 
 public interface BoardService {
 
-	int insertBoard(Board board) throws Exception;
+	void writeArticle(BoardDto boardDto) throws Exception;
+	BoardListDto listArticle(Map<String, String> map) throws Exception;
+//	PageNavigation makePageNavigation(Map<String, String> map) throws Exception;
+	BoardDto getArticle(int articleNo) throws Exception;
+	void updateHit(int articleNo) throws Exception;
 	
-	List<Board> listBoard() throws Exception;
+	void modifyArticle(BoardDto boardDto) throws Exception;
+//	
+	void deleteArticle(int articleNo) throws Exception;
 	
-	Board detailBoard(int articleNo) throws Exception;
-	
-	int updateBoard(Board board) throws Exception;
-	
-	int deleteBoard(Board board) throws Exception;
 }
