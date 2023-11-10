@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.enjoytrip.model.mapper.BoardMapper">
+
+	<resultMap type="board" id="boarddto">
+		<result column="article_no" property="articleNo"/>
+		<result column="user_id" property="userId"/>
+		<result column="subject" property="subject"/>
+		<result column="content" property="content"/>
+		<result column="hit" property="hit"/>
+		<result column="register_time" property="registerTime"/>
+	</resultMap>
+	
+	<insert id="insertBoard" parameterType="board">
+		insert into board (user_id, subject, content)
+		values (#{userId}, #{subject}, #{content})
+	</insert>
+	
+	<select id="listBoard" resultMap="boarddto">
+		select *
+		from board
+		order by register_time desc
+	</select>
+
+	<select id="detailBoard" parameterType="int"  resultMap="boarddto">
+		select *
+		 from board where article_no = #{articleNo}
+	</select>
+	
+	<update id="updateBoard" parameterType="board">
+		update board
+		<trim prefix="set" suffixOverrides=",">
+			<if test="subject != null">subject = #{subject},</if>
+			<if test="content != null">content = #{content},</if>
+		</trim>
+		where article_no = #{articleNo} and user_id = #{userId}
+	</update>
+	
+	<delete id="deleteBoard" parameterType="board">
+		delete from board
+		where article_no = #{articleNo} and user_id = #{userId}
+	</delete> 
+	
+</mapper>
