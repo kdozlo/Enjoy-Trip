@@ -24,7 +24,14 @@
                     style="--bs-scroll-height: 100px"
                 >
                     <li class="nav-item">
-                        <router-link :to="{ name: 'board' }" class="nav-link">게시판</router-link>
+                        <router-link :to="{ name: 'attraction' }" class="nav-link"
+                            >지역별관광지</router-link
+                        >
+                    </li>
+                    <li class="nav-item">
+                        <router-link :to="{ name: 'board' }" class="nav-link"
+                            >여행정보공유</router-link
+                        >
                     </li>
                     <li class="nav-item dropdown" style="margin-right: 50px">
                         <a
