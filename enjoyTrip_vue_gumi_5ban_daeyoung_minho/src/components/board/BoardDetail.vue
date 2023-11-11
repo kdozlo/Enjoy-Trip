@@ -62,7 +62,7 @@ function onDeleteArticle() {
             </div>
             <div class="col-lg-10 text-start">
                 <div class="row my-2">
-                    <h2 class="text-secondary px-2">제목 {{ article.subject }}</h2>
+                    <h2 class="text-secondary px-2">{{ article.subject }}</h2>
                 </div>
                 <div class="row">
                     <div class="col-md-8">
