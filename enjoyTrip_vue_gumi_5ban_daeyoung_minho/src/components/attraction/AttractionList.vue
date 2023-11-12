@@ -1,9 +1,26 @@
 <script setup>
 import { ref, onMounted } from "vue";
-import { sidoList } from "@/api/attraction.js";
+import { areaCode1 } from "@/api/attraction.js";
+import { areaBasedList1 } from "@/api/attraction.js";
+import { searchKeyword1 } from "@/api/attraction.js";
 
 const { VITE_ATTRACTION_API_SERVICE_KEY } = import.meta.env;
+
 const sidos = ref([]);
+
+const searchParam = ref({
+    serviceKey: VITE_ATTRACTION_API_SERVICE_KEY,
+    MobileOS: "ETC",
+    MobileApp: "EnjoyTrip",
+    _type: "json",
+    listYN: "Y",
+    arrange: "A",
+    numOfRows: "",
+    pageNo: "",
+    areaCode: "",
+    contentTypeId: "",
+    keyword: "",
+});
 
 onMounted(() => {
     getSidoList();
@@ -11,7 +28,8 @@ onMounted(() => {
 
 const getSidoList = () => {
     console.log("시도 정보를 얻어오자!");
-    sidoList(
+    sidos.value.push({"rnum" : null, "code" : '', "name" : "검색 할 지역 선택"});
+    areaCode1(
         {
             serviceKey: VITE_ATTRACTION_API_SERVICE_KEY,
             MobileOS: "ETC",
@@ -21,7 +39,7 @@ const getSidoList = () => {
         }
     ,
         ({ data }) => {
-            sidos.value = data.response.body.items.item;
+            sidos.value.push(...data.response.body.items.item);
             console.log("시도 정보 획득", sidos.value);
         },
         (error) => {
@@ -44,17 +62,17 @@ export default {
 
 <template>
     <div class="container">
-        <div style="height: 70px"></div>
-        <div class="row">
-            <div class="col-md-9">
-                <div class="alert alert-primary mt-3 text-center fw-bold" role="alert">
-                    전국 관광지 정보
-                </div>
+        <div class="row justify-content-center">
+            <div class="container text-center mt-3">
+                <div class="alert alert-info" role="alert">전국 관광지 정보</div>
+            </div>
+            <div class="col-lg-10">
                 <!-- 관광지 검색 start -->
                 <form class="d-flex my-3" onsubmit="return false;" role="search">
                     <select id="search-area" class="form-select me-2">
-                        <option value="0" selected :disabled="true">검색 할 지역 선택</option>
-                        <option v-for="sido in sidos" :key="sido.code" :sido="sido">
+                        <option v-for="sido in sidos" :key="sido.code" :sido="sido"
+                        :disabled="sido.code === '' ? true : false"
+                        :selected="sido.code === '' ? true : false">
                             {{ sido.name }}
                         </option>
                     </select>
@@ -77,6 +95,7 @@ export default {
                 <!-- kakao map start -->
                 <KakaoMap />
                 <!-- kakao map end -->
+                <!-- 관광지 검색 start -->
                 <div class="row">
                     <table class="table table-striped" style="display: none">
                         <thead>
