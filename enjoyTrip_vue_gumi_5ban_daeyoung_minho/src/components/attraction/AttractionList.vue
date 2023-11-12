@@ -1,3 +1,35 @@
+<script setup>
+import { ref, onMounted } from "vue";
+import { sidoList } from "@/api/attraction.js";
+
+const { VITE_ATTRACTION_API_SERVICE_KEY } = import.meta.env;
+const sidos = ref([]);
+
+onMounted(() => {
+    getSidoList();
+});
+
+const getSidoList = () => {
+    console.log("시도 정보를 얻어오자!");
+    sidoList(
+        {
+            serviceKey: VITE_ATTRACTION_API_SERVICE_KEY,
+            MobileOS: "ETC",
+            MobileApp: "EnjoyTrip",
+            _type: "json",
+        }
+    ,
+        ({ data }) => {
+            sidos.value = data.response.body.items.item;
+            console.log("시도 정보 획득", sidos.value);
+        },
+        (error) => {
+            console.log(error);
+        }
+    );
+};
+</script>
+
 <script>
 import KakaoMap from "./KakaoMap.vue";
 
@@ -20,7 +52,10 @@ export default {
                 <!-- 관광지 검색 start -->
                 <form class="d-flex my-3" onsubmit="return false;" role="search">
                     <select id="search-area" class="form-select me-2">
-                        <option value="0" selected>검색 할 지역 선택</option>
+                        <option value="0" selected :disabled="true">검색 할 지역 선택</option>
+                        <option v-for="sido in sidos" :key="sido.code" :value="sido.value">
+                            {{ sido.name }}
+                        </option>
                     </select>
                     <select id="search-content-id" class="form-select me-2">
                         <option value="0" selected>관광지 유형</option>
@@ -33,19 +68,12 @@ export default {
                         <option value="38">쇼핑</option>
                         <option value="39">음식점</option>
                     </select>
-                    <input
-                        id="search-keyword"
-                        class="form-control me-2"
-                        type="search"
-                        placeholder="검색어"
-                        aria-label="검색어"
-                    />
+                    <input id="search-keyword" class="form-control me-2" type="search" placeholder="검색어" aria-label="검색어" />
                     <button id="btn-search" class="btn btn-outline-success" type="button">
                         검색
                     </button>
                 </form>
                 <!-- kakao map start -->
-                <!-- <div id="map" class="mt-3" style="width: 100%; height: 400px"></div> -->
                 <KakaoMap />
                 <!-- kakao map end -->
                 <div class="row">

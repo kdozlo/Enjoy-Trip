@@ -1,6 +1,7 @@
 import axios from "axios";
 
 const { VITE_VUE_API_URL } = import.meta.env;
+const { VITE_ATTRACTION_API_URL } = import.meta.env;
 
 // local vue api axios instance
 function localAxios() {
@@ -13,4 +14,18 @@ function localAxios() {
   return instance;
 }
 
-export { localAxios };
+//opne api - attraction api axios instance
+function attractionAxios() {
+  const instance = axios.create({
+    baseURL: VITE_ATTRACTION_API_URL,
+    // headers : {
+    //   "Content-Type": "application/json;charset=utf-8",
+    // },
+  });
+  return instance;
+}
+
+export { 
+  localAxios,
+  attractionAxios,
+ };
