@@ -17,6 +17,7 @@ const getSidoList = () => {
             MobileOS: "ETC",
             MobileApp: "EnjoyTrip",
             _type: "json",
+            numOfRows: "20",
         }
     ,
         ({ data }) => {
@@ -53,7 +54,7 @@ export default {
                 <form class="d-flex my-3" onsubmit="return false;" role="search">
                     <select id="search-area" class="form-select me-2">
                         <option value="0" selected :disabled="true">검색 할 지역 선택</option>
-                        <option v-for="sido in sidos" :key="sido.code" :value="sido.value">
+                        <option v-for="sido in sidos" :key="sido.code" :sido="sido">
                             {{ sido.name }}
                         </option>
                     </select>
