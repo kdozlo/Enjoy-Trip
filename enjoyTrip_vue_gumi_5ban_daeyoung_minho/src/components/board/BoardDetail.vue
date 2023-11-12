@@ -43,6 +43,7 @@ function onDeleteArticle() {
     deleteArticle(
         articleno,
         (response) => {
+            alert("글이 삭제되었습니다.");
             if (response.status == 200) moveList();
         },
         (error) => {
