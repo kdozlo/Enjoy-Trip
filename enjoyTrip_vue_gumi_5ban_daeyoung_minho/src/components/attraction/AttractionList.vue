@@ -68,8 +68,9 @@ const getAttractionList = () => {
             },
             ({ data }) => {
                 console.log("areaBasedList1 api 호출");
+                attractionList.value.length = 0;
                 attractionList.value.push(...data.response.body.items.item);
-                console.log("관광지 정보 획득", attractionList.value);
+                console.log("위치 기반 관광지 정보 획득", attractionList.value);
             },
             (error) => {
                 console.log(error);
@@ -80,7 +81,9 @@ const getAttractionList = () => {
             searchParam.value,
             ({ data }) => {
                 console.log("searchKeyword1 api 호출");
+                attractionList.value.length = 0;
                 attractionList.value.push(...data.response.body.items.item);
+                console.log("키워드 기반 관광지 정보 획득", attractionList.value);
             },
             (error) => {
                 console.log(error);
