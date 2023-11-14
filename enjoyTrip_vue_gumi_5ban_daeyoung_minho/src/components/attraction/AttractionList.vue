@@ -137,9 +137,10 @@ const getAttraction = (attraction) => {
                         <option :value="38">쇼핑</option>
                         <option :value="39">음식점</option>
                     </select>
-                    <input
+                    <div class="input-group input-group-sm">
+                        <input
                         id="search-keyword"
-                        class="form-control me-2"
+                        class="form-control"
                         type="search"
                         placeholder="검색어"
                         aria-label="검색어"
@@ -153,6 +154,7 @@ const getAttraction = (attraction) => {
                     >
                         검색
                     </button>
+                    </div>
                 </form>
                 <!-- kakao map start -->
                 <VKakaoMap :attractionList="attractionList" :selectStation="selectStation" />
