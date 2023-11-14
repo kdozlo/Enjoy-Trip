@@ -3,12 +3,15 @@ import { ref, onMounted } from "vue";
 import { areaCode1 } from "@/api/attraction.js";
 import { areaBasedList1 } from "@/api/attraction.js";
 import { searchKeyword1 } from "@/api/attraction.js";
+import VKakaoMap from "@/components/common/VKakaoMap.vue";
 
 const { VITE_ATTRACTION_API_SERVICE_KEY } = import.meta.env;
 
 const sidos = ref([]);
 
 const attractionList = ref([]);
+
+const selectStation = ref({});
 
 const searchParam = ref({
     MobileOS: "ETC",
@@ -63,13 +66,12 @@ const getAttractionList = () => {
                 contentTypeId: searchParam.value.contentTypeId,
                 areaCode: searchParam.value.areaCode,
                 serviceKey: VITE_ATTRACTION_API_SERVICE_KEY,
-                numOfRows: "",
-                pageNo: "",
+                numOfRows: searchParam.value.numOfRows,
+                pageNo: searchParam.value.pageNo,
             },
             ({ data }) => {
                 console.log("areaBasedList1 api 호출");
-                attractionList.value.length = 0;
-                attractionList.value.push(...data.response.body.items.item);
+                attractionList.value = data.response.body.items.item;
                 console.log("위치 기반 관광지 정보 획득", attractionList.value);
             },
             (error) => {
@@ -81,8 +83,7 @@ const getAttractionList = () => {
             searchParam.value,
             ({ data }) => {
                 console.log("searchKeyword1 api 호출");
-                attractionList.value.length = 0;
-                attractionList.value.push(...data.response.body.items.item);
+                attractionList.value = data.response.body.items.item;
                 console.log("키워드 기반 관광지 정보 획득", attractionList.value);
             },
             (error) => {
@@ -90,16 +91,9 @@ const getAttractionList = () => {
             }
         );
 };
-</script>
 
-<script>
-import KakaoMap from "./KakaoMap.vue";
-
-export default {
-    name: "App",
-    components: {
-        KakaoMap,
-    },
+const getAttraction = (attraction) => {
+    selectStation.value = attraction;
 };
 </script>
 
@@ -161,7 +155,7 @@ export default {
                     </button>
                 </form>
                 <!-- kakao map start -->
-                <KakaoMap />
+                <VKakaoMap :attractionList="attractionList" :selectStation="selectStation" />
                 <!-- kakao map end -->
                 <!-- 관광지 검색 start -->
                 <div class="row">
@@ -181,6 +175,7 @@ export default {
                                 v-for="attraction in attractionList"
                                 :key="attraction.contentid"
                                 :attraction="attraction"
+                                @click="getAttraction(attraction)"
                             >
                                 <td><img :src="attraction.firstimage" style="width: 100px" /></td>
                                 <td>{{ attraction.title }}</td>
