@@ -139,29 +139,33 @@ const getAttraction = (attraction) => {
                     </select>
                     <div class="input-group input-group-sm">
                         <input
-                        id="search-keyword"
-                        class="form-control"
-                        type="search"
-                        placeholder="검색어"
-                        aria-label="검색어"
-                        v-model="searchParam.keyword"
-                    />
-                    <button
-                        id="btn-search"
-                        class="btn btn-outline-success"
-                        type="button"
-                        @click="getAttractionList"
-                    >
-                        검색
-                    </button>
+                            id="search-keyword"
+                            class="form-control"
+                            type="search"
+                            placeholder="검색어"
+                            aria-label="검색어"
+                            v-model="searchParam.keyword"
+                        />
+                        <button
+                            id="btn-search"
+                            class="btn btn-outline-success"
+                            type="button"
+                            @click="getAttractionList"
+                        >
+                            검색
+                        </button>
                     </div>
                 </form>
-                <!-- kakao map start -->
-                <VKakaoMap :attractionList="attractionList" :selectStation="selectStation" />
-                <!-- kakao map end -->
+            </div>
+            <div class="row mb-2">
+                <div class="col">
+                    <!-- kakao map start -->
+                    <VKakaoMap :attractionList="attractionList" :selectStation="selectStation" />
+                    <!-- kakao map end -->
+                </div>
                 <!-- 관광지 검색 start -->
-                <div class="row">
-                    <table class="table table-striped" v-show="attractionList.length != 0">
+                <div class="col">
+                    <table class="table table-striped">
                         <thead class="text-center">
                             <tr>
                                 <th>대표이미지</th>
@@ -171,7 +175,7 @@ const getAttraction = (attraction) => {
                                 <th>경도</th>
                             </tr>
                         </thead>
-                        <tbody id="trip-list">
+                        <tbody id="trip-list" v-show="attractionList.length != 0">
                             <tr
                                 class="text-center"
                                 v-for="attraction in attractionList"
@@ -179,7 +183,9 @@ const getAttraction = (attraction) => {
                                 :attraction="attraction"
                                 @click="getAttraction(attraction)"
                             >
-                                <td><img :src="attraction.firstimage" style="width: 100px" /></td>
+                                <td>
+                                    <img :src="attraction.firstimage" style="width: 100px" />
+                                </td>
                                 <td>{{ attraction.title }}</td>
                                 <td>{{ attraction.addr1 }}</td>
                                 <td>{{ attraction.mapx }}</td>
@@ -188,8 +194,8 @@ const getAttraction = (attraction) => {
                         </tbody>
                     </table>
                 </div>
-                <!-- 관광지 검색 end -->
             </div>
+            <!-- 관광지 검색 end -->
         </div>
     </div>
 </template>
