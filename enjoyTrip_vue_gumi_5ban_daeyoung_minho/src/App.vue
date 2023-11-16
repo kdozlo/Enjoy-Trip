@@ -12,9 +12,4 @@ import Footer from "@/components/layout/Footer.vue";
     </div>
 </template>
 
-<style scoped>
-#app {
-    width: 100vw;
-    height: 100vh;
-}
-</style>
+<style scoped></style>

@@ -4,6 +4,7 @@ import { areaCode1 } from "@/api/attraction.js";
 import { areaBasedList1 } from "@/api/attraction.js";
 import { searchKeyword1 } from "@/api/attraction.js";
 import VKakaoMap from "@/components/common/VKakaoMap.vue";
+import PageNavigation from "@/components/common/PageNavigation.vue";
 
 const { VITE_ATTRACTION_API_SERVICE_KEY } = import.meta.env;
 
@@ -12,6 +13,10 @@ const sidos = ref([]);
 const attractionList = ref([]);
 
 const selectStation = ref({});
+
+const currentPage = ref(1);
+
+const totalPage = ref(0);
 
 const searchParam = ref({
     MobileOS: "ETC",
@@ -22,7 +27,7 @@ const searchParam = ref({
     contentTypeId: "0",
     areaCode: "",
     serviceKey: VITE_ATTRACTION_API_SERVICE_KEY,
-    numOfRows: "",
+    numOfRows: import.meta.env.VITE_ARTICLE_NAVIGATION_SIZE,
     pageNo: "",
     keyword: "",
 });
@@ -55,7 +60,7 @@ const getSidoList = () => {
 
 const getAttractionList = () => {
     console.log(searchParam.value);
-    if (searchParam.value.keyword === "")
+    if (searchParam.value.keyword === "") {
         areaBasedList1(
             {
                 MobileOS: "ETC",
@@ -67,28 +72,42 @@ const getAttractionList = () => {
                 areaCode: searchParam.value.areaCode,
                 serviceKey: VITE_ATTRACTION_API_SERVICE_KEY,
                 numOfRows: searchParam.value.numOfRows,
-                pageNo: searchParam.value.pageNo,
+                pageNo: currentPage.value,
             },
             ({ data }) => {
                 console.log("areaBasedList1 api 호출");
 
                 attractionList.value = data.response.body.items.item;
-
+                // currentPage.value = data.response.body.pageNo;
+                totalPage.value = Math.ceil(parseInt(data.response.body.totalCount) / parseInt(10));
+                console.log(
+                    data.response.body.numOfRows,
+                    " ",
+                    data.response.body.totalCount,
+                    " ",
+                    currentPage.value,
+                    " ",
+                    totalPage.value
+                );
                 console.log("위치 기반 관광지 정보 획득", attractionList.value);
             },
             (error) => {
                 console.log(error);
             }
         );
-    else
+    } else {
         searchKeyword1(
             searchParam.value,
             ({ data }) => {
                 console.log("searchKeyword1 api 호출");
                 if (typeof data.response.body.items.item != "undefined") {
                     attractionList.value = data.response.body.items.item;
+                    totalPage.value = data.response.body.totalCount;
+                    currentPage.value = data.response.body.pageNo;
                 } else {
                     attractionList.value.length = 0;
+                    totalPage.value = 1;
+                    currentPage.value = 1;
                 }
                 console.log("키워드 기반 관광지 정보 획득", attractionList.value);
             },
@@ -96,6 +115,21 @@ const getAttractionList = () => {
                 console.log(error);
             }
         );
+    }
+};
+
+const onPageChange = (val) => {
+    console.log(val + "번 페이지로 이동 준비 끝!!!");
+    currentPage.value = val;
+    searchParam.value.pgno = val;
+    getAttractionList();
+};
+
+const onSearchChage = () => {
+    console.log("새로 조회, 현재 페이지 리셋");
+    currentPage.value = 1;
+    searchParam.value.pgno = 1;
+    getAttractionList();
 };
 
 const getAttraction = (attraction) => {
@@ -156,7 +190,7 @@ const getAttraction = (attraction) => {
                             id="btn-search"
                             class="btn btn-outline-success"
                             type="button"
-                            @click="getAttractionList"
+                            @click="onSearchChage"
                         >
                             검색
                         </button>
@@ -177,8 +211,6 @@ const getAttraction = (attraction) => {
                                 <th>대표이미지</th>
                                 <th>관광지명</th>
                                 <th>주소</th>
-                                <th>위도</th>
-                                <th>경도</th>
                             </tr>
                         </thead>
 
@@ -204,11 +236,14 @@ const getAttraction = (attraction) => {
                                 </td>
                                 <td>{{ attraction.title }}</td>
                                 <td>{{ attraction.addr1 }}</td>
-                                <td>{{ attraction.mapx }}</td>
-                                <td>{{ attraction.mapy }}</td>
                             </tr>
                         </tbody>
                     </table>
+                    <PageNavigation
+                        :current-page="currentPage"
+                        :total-page="totalPage"
+                        @pageChange="onPageChange"
+                    ></PageNavigation>
                 </div>
             </div>
             <!-- 관광지 검색 end -->
