@@ -170,7 +170,7 @@ const getAttraction = (attraction) => {
                     <!-- kakao map end -->
                 </div>
                 <!-- 관광지 검색 start -->
-                <div class="col">
+                <div class="col overflow-auto" style="max-height: 700px">
                     <table class="table table-striped">
                         <thead class="text-center">
                             <tr>
@@ -181,6 +181,7 @@ const getAttraction = (attraction) => {
                                 <th>경도</th>
                             </tr>
                         </thead>
+
                         <tbody id="trip-list" v-show="attractionList.length == 0">
                             <tr class="text-center">
                                 <td></td>
