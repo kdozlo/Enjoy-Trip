@@ -71,7 +71,9 @@ const getAttractionList = () => {
             },
             ({ data }) => {
                 console.log("areaBasedList1 api 호출");
+
                 attractionList.value = data.response.body.items.item;
+
                 console.log("위치 기반 관광지 정보 획득", attractionList.value);
             },
             (error) => {
@@ -83,7 +85,11 @@ const getAttractionList = () => {
             searchParam.value,
             ({ data }) => {
                 console.log("searchKeyword1 api 호출");
-                attractionList.value = data.response.body.items.item;
+                if (typeof data.response.body.items.item != "undefined") {
+                    attractionList.value = data.response.body.items.item;
+                } else {
+                    attractionList.value.length = 0;
+                }
                 console.log("키워드 기반 관광지 정보 획득", attractionList.value);
             },
             (error) => {
@@ -175,6 +181,15 @@ const getAttraction = (attraction) => {
                                 <th>경도</th>
                             </tr>
                         </thead>
+                        <tbody id="trip-list" v-show="attractionList.length == 0">
+                            <tr class="text-center">
+                                <td></td>
+                                <td>조회 데이터가 없습니다.</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
                         <tbody id="trip-list" v-show="attractionList.length != 0">
                             <tr
                                 class="text-center"
