@@ -128,7 +128,7 @@ const onPageChange = (val) => {
 const onSearchChage = () => {
     console.log("새로 조회, 현재 페이지 리셋");
     currentPage.value = 1;
-    searchParam.value.pgno = 1;
+    searchParam.value.pageNo = 1;
     getAttractionList();
 };
 
