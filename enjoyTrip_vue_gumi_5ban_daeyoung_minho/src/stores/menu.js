@@ -9,10 +9,16 @@ export const useMenuStore = defineStore("menuStore", () => {
         { name: "로그아웃", show: false, routeName: "user-logout" },
     ]);
 
+    if (localStorage.getItem("menuList") == null)
+        localStorage.setItem("menuList", JSON.stringify(menuList.value));
+
     const changeMenuState = () => {
         menuList.value = menuList.value.map((item) => ({ ...item, show: !item.show }));
-        sessionStorage.setItem("menuList", menuList);
+        localStorage.setItem("menuList", JSON.stringify(menuList.value));
     };
+
+    console.log(JSON.parse(localStorage.getItem("menuList")));
+    menuList.value = JSON.parse(localStorage.getItem("menuList"));
 
     return {
         menuList,
