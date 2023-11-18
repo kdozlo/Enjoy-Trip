@@ -1,16 +1,23 @@
 <script setup>
 import { useMenuStore } from "@/stores/menu";
+import { useMemberStore } from "@/stores/member";
 import { storeToRefs } from "pinia";
 
 const menuStore = useMenuStore();
+const memberStore = useMemberStore();
 
 // 반응형을 유지하면서 스토어에서 속성을 추출하려면, storeToRefs()를 사용
 // https://pinia.vuejs.kr/core-concepts/
 const { menuList } = storeToRefs(menuStore);
 const { changeMenuState } = menuStore;
 
-const logout = () => {
+const { userInfo } = storeToRefs(memberStore);
+const { userLogout } = memberStore;
+
+const logout = async () => {
     console.log("로그아웃!!!!");
+    console.log(userInfo);
+    await userLogout(userInfo.value.userid);
     changeMenuState();
 };
 </script>

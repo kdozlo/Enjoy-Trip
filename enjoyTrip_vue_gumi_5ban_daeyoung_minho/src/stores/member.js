@@ -121,6 +121,8 @@ export const useMemberStore = defineStore("memberStore", () => {
           isLogin.value = false;
           userInfo.value = null;
           isValidToken.value = false;
+          sessionStorage.clear("refreshToken")
+          sessionStorage.clear("accessToken");
         } else {
           console.error("유저 정보 없음!!!!");
         }
@@ -141,4 +143,6 @@ export const useMemberStore = defineStore("memberStore", () => {
     tokenRegenerate,
     userLogout,
   };
-});
+},
+{ persist: { storage: sessionStorage } }
+);
