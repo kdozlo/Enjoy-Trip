@@ -1,7 +1,7 @@
 <script setup></script>
 
 <template>
-    <div style="height: 40px"></div>
+    <div style="height: 40vh"></div>
     <footer class="navbar navbar-expand-sm bg-light justify-content-center">
         <ul class="navbar-nav">
             <li><a href="#" class="nav-link text-secondary">개인정보처리방침</a></li>
