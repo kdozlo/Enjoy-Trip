@@ -5,6 +5,7 @@ import { jwtDecode } from "jwt-decode";
 
 import { userConfirm, findById, tokenRegeneration, logout } from "@/api/user";
 import { httpStatusCode } from "@/util/http-status";
+import { useMenuStore } from "@/stores/menu";
 
 export const useMemberStore = defineStore("memberStore", () => {
   const router = useRouter();
@@ -13,6 +14,8 @@ export const useMemberStore = defineStore("memberStore", () => {
   const isLoginError = ref(false);
   const userInfo = ref(null);
   const isValidToken = ref(false);
+
+  const { changeMenuState } = useMenuStore();
 
   const userLogin = async (loginUser) => {
     await userConfirm(
@@ -100,6 +103,9 @@ export const useMemberStore = defineStore("memberStore", () => {
               isLogin.value = false;
               userInfo.value = null;
               isValidToken.value = false;
+              sessionStorage.clear("refreshToken");
+              sessionStorage.clear("accessToken");
+              changeMenuState();
               router.push({ name: "user-login" });
             },
             (error) => {
@@ -121,7 +127,7 @@ export const useMemberStore = defineStore("memberStore", () => {
           isLogin.value = false;
           userInfo.value = null;
           isValidToken.value = false;
-          sessionStorage.clear("refreshToken")
+          sessionStorage.clear("refreshToken");
           sessionStorage.clear("accessToken");
         } else {
           console.error("유저 정보 없음!!!!");
