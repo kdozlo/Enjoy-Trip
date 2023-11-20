@@ -19,5 +19,11 @@ public interface MemberMapper {
 	List<MemberDto> listMember() throws SQLException;
 	void updateMember(MemberDto memberDto) throws SQLException;
 	void deleteMember(MemberDto memberDto) throws SQLException;
-	
+
+	//jwt
+	MemberDto userInfo(String userId) throws SQLException;
+	void saveRefreshToken(Map<String, String> map) throws SQLException;
+	Object getRefreshToken(String userid) throws SQLException;
+	void deleteRefreshToken(Map<String, String> map) throws SQLException;
+
 }
