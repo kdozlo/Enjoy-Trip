@@ -11,6 +11,7 @@
 		<result column="email_id" property="emailId"/>
 		<result column="email_domain" property="emailDomain"/>
 		<result column="join_date" property="joinDate"/>
+		<result column="token" property="refreshToken"/>
 	</resultMap>
 	
 	<select id="idCheck" parameterType="String" resultType="int">
@@ -24,11 +25,12 @@
 		values (#{userName}, #{userId}, #{userPwd}, #{emailId}, #{emailDomain})
 	</insert>
 
+	<!-- jwt 대체
 	<select id="loginMember" parameterType="memberDto"  resultMap="member">
 		select *
 		 from members where user_id = #{userId} and user_password = #{userPwd}
-	</select>
-	
+	</select>-->
+
 	<!-- ADMIN -->
 	<select id="listMember" resultMap="member">
 		select *
@@ -50,6 +52,35 @@
 	<delete id="deleteMember" parameterType="memberDto">
 		delete from members
 		where user_id = #{userId} and user_password = #{userPwd}
-	</delete> 
-	
+	</delete>
+
+	<select id="loginMember" parameterType="map" resultMap="member">
+		select user_id, user_name, token
+		from members
+		where user_id = #{userId} and user_password = #{userPwd}
+	</select>
+
+	<select id="userInfo" parameterType="string" resultMap="member">
+		select user_name, user_id, email_id, email_domain, join_date
+		from members
+		where user_id = #{userId}
+	</select>
+
+	<update id="saveRefreshToken" parameterType="map">
+		update members
+		set token = #{token}
+		where user_id = #{userId}
+	</update>
+
+	<select id="getRefreshToken" parameterType="string" resultType="string">
+		select token
+		from members
+		where user_id = #{userId}
+	</select>
+
+	<update id="deleteRefreshToken" parameterType="map">
+		update members
+		set token = #{token, jdbcType=VARCHAR}
+		where user_id = #{userId}
+	</update>
 </mapper>

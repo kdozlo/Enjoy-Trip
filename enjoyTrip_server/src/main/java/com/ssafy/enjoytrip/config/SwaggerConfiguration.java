@@ -41,7 +41,7 @@ public class SwaggerConfiguration {
 	private ApiInfo apiInfo() {
 		String descript = "<img src=\"http://localhost/vue/static/assets/img/ssafy_logo.png\"><br>";
 		descript += "<h2>싸피 Vuejs 개발을 위한 API 문서입니다.</h2>";
-		descript += "회원정보, 게시판, 아파트 정보를 테스트 할 수 있습니다.";
+		descript += "회원정보, 게시판, 여행지 정보를 테스트 할 수 있습니다.";
 		return new ApiInfoBuilder().title(title).description(descript)
 //				.termsOfServiceUrl("https://edu.ssafy.com")
 				.contact(new Contact("SSAFY", "https://edu.ssafy.com", "ssafy@ssafy.com")).license("SSAFY License")
