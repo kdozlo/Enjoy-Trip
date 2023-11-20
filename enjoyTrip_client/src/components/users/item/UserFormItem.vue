@@ -3,13 +3,12 @@ import { ref, watch } from "vue";
 import { storeToRefs } from "pinia";
 import { useRoute, useRouter } from "vue-router";
 import { useMemberStore } from "@/stores/member";
-// import { registUser, modifyUser } from "@/api/user";
+import { registUser, modifyUser } from "@/api/user";
 
 const router = useRouter();
 const route = useRoute();
 
 const props = defineProps({ type: String });
-const btnMsg = ref("회원가입");
 
 const userInfoDto = ref({
     userId: "",
@@ -23,7 +22,7 @@ const userInfoDto = ref({
 
 const placeholderValue = ref({
     userId: "아이디...",
-    userName: "닉네임...",
+    userName: "이름...",
     emailId: "이메일 아이디...",
     emailDomain: "선택",
 });
@@ -32,120 +31,128 @@ if (props.type === "modify") {
     const memberStore = useMemberStore();
     const { userInfo } = storeToRefs(memberStore);
     placeholderValue.value = userInfo.value;
-    btnMsg.value = "정보수정";
+    userInfoDto = userInfo.value;
 }
 
-// const subjectErrMsg = ref("");
-// const contentErrMsg = ref("");
-// watch(
-//     () => article.value.subject,
-//     (value) => {
-//         let len = value.length;
-//         if (len == 0 || len > 30) {
-//             subjectErrMsg.value = "제목을 확인해 주세요!!!";
-//         } else subjectErrMsg.value = "";
-//     },
-//     { immediate: true }
-// );
-// watch(
-//     () => article.value.content,
-//     (value) => {
-//         let len = value.length;
-//         if (len == 0 || len > 500) {
-//             contentErrMsg.value = "내용을 확인해 주세요!!!";
-//         } else contentErrMsg.value = "";
-//     },
-//     { immediate: true }
-// );
+const userIdErrMsg = ref("");
+const userPwdErrMsg = ref("");
+const userNameErrMsg = ref("");
+const emailIdNameErrMsg = ref("");
+const emailDomainErrMsg = ref("");
 
-// function onSubmit() {
-//     // event.preventDefault();
+watch(
+    () => userInfoDto.value.userId,
+    (value) => {
+        let len = value.length;
+        if (len == 0 || len > 15) {
+            userIdErrMsg.value = "아이디를 확인해 주세요!!!";
+        } else userIdErrMsg.value = "";
+    },
+    { immediate: true }
+);
+watch(
+    () => article.value.userPwd,
+    (value) => {
+        let len = value.length;
+        if (len < 4) {
+            userPwdErrMsg.value = "비밀번호는 4자리 이상 작성해 주세요!!!";
+        } else userPwdErrMsg.value = "";
+    },
+    { immediate: true }
+);
 
-//     if (subjectErrMsg.value) {
-//         alert(subjectErrMsg.value);
-//     } else if (contentErrMsg.value) {
-//         alert(contentErrMsg.value);
-//     } else {
-//         // props.type === "regist" ? registUser() : modifyUser();
-//     }
-// }
+watch(
+    () => article.value.userName,
+    (value) => {
+        let len = value.length;
+        if (len == 0 || len > 15) {
+            userNameErrMsg.value = "이름을 확인해 주세요!!!";
+        } else userNameErrMsg.value = "";
+    },
+    { immediate: true }
+);
 
-// function registUser() {
-//     console.log("글등록하자!!", article.value);
-//     registUser(
-//         article.value,
-//         (response) => {
-//             let msg = "글등록 처리시 문제 발생했습니다.";
-//             if (response.status == 201) msg = "글등록이 완료되었습니다.";
-//             alert(msg);
-//             moveList();
-//         },
-//         (error) => console.log(error)
-//     );
-// }
+watch(
+    () => article.value.emailId,
+    (value) => {
+        let len = value.length;
+        if (len == 0 || len > 15) {
+            emailIdErrMsg.value = "이메일 아이디를 확인해 주세요!!!";
+        } else emailIdErrMsg.value = "";
+    },
+    { immediate: true }
+);
 
-// function modifyUser() {
-//     console.log(article.value.articleNo + "번글 수정하자!!", article.value);
-//     modifyUser(
-//         article.value,
-//         (response) => {
-//             let msg = "글수정 처리시 문제 발생했습니다.";
-//             if (response.status == 200) msg = "글정보 수정이 완료되었습니다.";
-//             alert(msg);
-//             moveList();
-//         },
-//         (error) => console.log(error)
-//     );
-// }
+watch(
+    () => article.value.emailDomain,
+    (value) => {
+        let len = value.length;
+        if (len == 0) {
+            emailDomainErrMsg.value = "이메일 도메인을 확인해 주세요!!!";
+        } else emailDomainErrMsg.value = "";
+    },
+    { immediate: true }
+);
 
-// function moveList() {
-//     router.push({ name: "article-list" });
-// }
+function onSubmit() {
+    // event.preventDefault();
+
+    if (userIdErrMsg.value) {
+        alert(userIdErrMsg.value);
+    } else if (userPwdErrMsg.value) {
+        alert(userPwdErrMsg.value);
+    } else if (userNameErrMsg.value) {
+        alert(userNameErrMsg.value);
+    } else if (emailIdNameErrMsg.value) {
+        alert(emailIdNameErrMsg.value);
+    } else if (emailDomainErrMsg.value) {
+        alert(emailDomainErrMsg.value);
+    } else {
+        props.type === "modify" ? registUser() : modifyUser();
+    }
+}
+
+function registUser() {
+    console.log("회원가입을 하자!!!", userInfoDto.value);
+    registUser(
+        userInfoDto.value,
+        (response) => {
+            let msg = "회원가입 처리시 문제 발생했습니다.";
+            if (response.status == 201) msg = "회원가입이 완료되었습니다.";
+            alert(msg);
+            moveMain();
+        },
+        (error) => console.log(error)
+    );
+}
+
+function modifyUser() {
+    console.log(userInfoDto.value.userName + "의 회원정보를 수정하자!!");
+    modifyUser(
+        userInfoDto.value,
+        (response) => {
+            let msg = "회원정보 수정 처리시 문제 발생했습니다.";
+            if (response.status == 200) msg = "회원정보 수정이 완료되었습니다.";
+            alert(msg);
+            moveMain();
+        },
+        (error) => console.log(error)
+    );
+}
+
+function moveMain() {
+    router.push({ name: "main" });
+}
 </script>
 
 <template>
-    <!-- <form @submit.prevent="onSubmit">
-        <div class="mb-3">
-            <label for="userid" class="form-label">작성자 ID : </label>
-            <input
-                type="text"
-                class="form-control"
-                v-model="article.userId"
-                :disabled="isUseId"
-                placeholder="작성자ID..."
-            />
-        </div>
-        <div class="mb-3">
-            <label for="subject" class="form-label">제목 : </label>
-            <input
-                type="text"
-                class="form-control"
-                v-model="article.subject"
-                placeholder="제목..."
-            />
-        </div>
-        <div class="mb-3">
-            <label for="content" class="form-label">내용 : </label>
-            <textarea class="form-control" v-model="article.content" rows="10"></textarea>
-        </div>
-        <div class="col-auto text-center">
-            <button type="submit" class="btn btn-outline-primary mb-3" v-if="type === 'regist'">
-                글작성
-            </button>
-            <button type="submit" class="btn btn-outline-success mb-3" v-else>글수정</button>
-            <button type="button" class="btn btn-outline-danger mb-3 ms-1" @click="moveList">
-                목록으로이동...
-            </button>
-        </div>
-    </form> -->
-
     <form>
         <div class="mb-3">
             <label for="username" class="form-label">이름 : </label>
             <input type="text" class="form-control" :placeholder="placeholderValue.userName" />
         </div>
 
-        <div class="mb-3" v-if="props.type == 'register'">
+        <div class="mb-3" v-if="type === 'register'">
             <label for="userid" class="form-label">아이디 : </label>
             <input type="text" class="form-control" :placeholder="placeholderValue.userId" />
         </div>
@@ -173,8 +180,14 @@ if (props.type === "modify") {
             </div>
         </div>
         <div class="col-auto text-center">
-            <button type="button" class="btn btn-outline-primary mb-3">{{ btnMsg }}</button>
+            <button type="submit" class="btn btn-outline-primary mb-3" v-if="type === 'modify'">
+                회원정보 수정
+            </button>
+            <button type="submit" class="btn btn-outline-primary mb-3" v-else>회원가입</button>
             <button type="button" class="btn btn-outline-success ms-1 mb-3">초기화</button>
+            <button type="button" class="btn btn-outline-danger mb-3 ms-1" @click="moveMain">
+                취소
+            </button>
         </div>
     </form>
 </template>
