@@ -24,12 +24,12 @@ async function logout(userid, success, fail) {
 
 async function registUser(user, success, fail) {
     local.defaults.headers["Authorization"] = sessionStorage.getItem("accessToken");
-    await local.get(`/memberapi/join`, user).then(success).catch(fail);
+    await local.post(`/memberapi/join`, user).then(success).catch(fail);
 }
 
 async function modifyUser(user, success, fail) {
     local.defaults.headers["Authorization"] = sessionStorage.getItem("accessToken");
-    await local.get(`/memberapi/updatemember`, user).then(success).catch(fail);
+    await local.put(`/memberapi/updatemember`, user).then(success).catch(fail);
 }
 
 export { userConfirm, findById, tokenRegeneration, logout, registUser, modifyUser };
