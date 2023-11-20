@@ -125,6 +125,38 @@ public class MemberController {
 		return new ResponseEntity<Map<String, Object>>(resultMap, status);
 	}
 
+	// 회원 정보 수정
+	@ApiOperation(value = "회원정보수정")
+	@PutMapping("/updatemember")
+	public ResponseEntity<?> update(@RequestBody MemberDto member,HttpServletRequest request) {
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = HttpStatus.ACCEPTED;
+		if (jwtUtil.checkToken(request.getHeader("Authorization"))) {
+			log.info("정보수정 가능!!!");
+			try {
+//				로그인 사용자 정보.
+				MemberDto memberDto = memberService.userInfo(member.getUserId());
+				status = HttpStatus.OK;
+				try {
+					memberService.updateMember(member);
+					return new ResponseEntity<String>("회원 정보가 수정되었습니다.", status);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					return exceptionHandling(e);
+				}
+			} catch (Exception e) {
+				log.error("회원정보수정 실패 : {}", e);
+				resultMap.put("message", e.getMessage());
+				status = HttpStatus.INTERNAL_SERVER_ERROR;
+			}
+		} else {
+			log.error("로그인이 만료되었습니다!!!");
+			status = HttpStatus.UNAUTHORIZED;
+		}
+		return new ResponseEntity<Map<String, Object>>(resultMap, status);
+	}
+
 	@ApiOperation(value = "로그아웃", notes = "회원 정보를 담은 Token을 제거한다.", response = Map.class)
 	@GetMapping("/logout/{userId}")
 	public ResponseEntity<?> removeToken(@PathVariable ("userId") @ApiParam(value = "로그아웃할 회원의 아이디.", required = true) String userId) {
@@ -154,18 +186,7 @@ public class MemberController {
 		}
 	}
 	
-	// 회원 정보 수정
-	@PutMapping("/updatemember")
-	public ResponseEntity<?> update(@RequestBody MemberDto member) {
-		try {
-			memberService.updateMember(member);
-			return new ResponseEntity<String>("회원 정보가 수정되었습니다.", HttpStatus.OK);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return exceptionHandling(e);
-		}
-	}
+
 	
 	// 회원 정보 탈퇴
 	@DeleteMapping("/deletemember")
