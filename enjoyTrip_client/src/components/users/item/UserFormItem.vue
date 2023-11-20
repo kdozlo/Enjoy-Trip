@@ -12,20 +12,26 @@ const props = defineProps({ type: String });
 const btnMsg = ref("회원가입");
 
 const userInfoDto = ref({
-    userId: "아이디",
-    userName: "닉네임",
+    userId: "",
+    userName: "",
     userPwd: "",
-    emailId: "이메일 아이디",
-    emailDomain: "이메일 도메인",
+    emailId: "",
+    emailDomain: "",
     joinDate: "",
     refreshToken: "",
+});
+
+const placeholderValue = ref({
+    userId: "아이디...",
+    userName: "닉네임...",
+    emailId: "이메일 아이디...",
+    emailDomain: "선택",
 });
 
 if (props.type === "modify") {
     const memberStore = useMemberStore();
     const { userInfo } = storeToRefs(memberStore);
-    userInfoDto.value = userInfo.value;
-    console.log("check", userInfo.value);
+    placeholderValue.value = userInfo.value;
     btnMsg.value = "정보수정";
 }
 
@@ -136,29 +142,29 @@ if (props.type === "modify") {
     <form>
         <div class="mb-3">
             <label for="username" class="form-label">이름 : </label>
-            <input type="text" class="form-control" :placeholder="userInfoDto.userName" />
+            <input type="text" class="form-control" :placeholder="placeholderValue.userName" />
         </div>
 
         <div class="mb-3" v-if="props.type == 'register'">
             <label for="userid" class="form-label">아이디 : </label>
-            <input type="text" class="form-control" :placeholder="userInfoDto.userId" />
+            <input type="text" class="form-control" :placeholder="placeholderValue.userId" />
         </div>
 
         <div class="mb-3">
             <label for="userpwd" class="form-label">비밀번호 : </label>
-            <input type="text" class="form-control" placeholder="비밀번호" />
+            <input type="text" class="form-control" placeholder="비밀번호..." />
         </div>
         <div class="mb-3">
             <label for="pwdcheck" class="form-label">비밀번호확인 : </label>
-            <input type="text" class="form-control" id="pwdcheck" placeholder="비밀번호 확인" />
+            <input type="text" class="form-control" id="pwdcheck" placeholder="비밀번호 확인..." />
         </div>
         <div class="mb-3">
             <label for="emailid" class="form-label">이메일 : </label>
             <div class="input-group">
-                <input type="text" class="form-control" :placeholder="userInfoDto.emailId" />
+                <input type="text" class="form-control" :placeholder="placeholderValue.emailId" />
                 <span class="input-group-text">@</span>
                 <select class="form-select" aria-label="이메일 도메인 선택">
-                    <option selected>{{ userInfoDto.emailDomain }}</option>
+                    <option selected>{{ placeholderValue.emailDomain }}</option>
                     <option value="ssafy.com">싸피</option>
                     <option value="google.com">구글</option>
                     <option value="naver.com">네이버</option>
