@@ -7,11 +7,11 @@ import UserFormItem from "./item/UserFormItem.vue";
         <div class="row justify-content-center">
             <div class="col-lg-10">
                 <h2 class="my-3 py-3 shadow-sm bg-light text-center">
-                    <mark class="orange">회원가입</mark>
+                    <mark class="orange">회원정보 수정</mark>
                 </h2>
             </div>
             <div class="col-lg-10 text-start">
-                <UserFormItem type="register" />
+                <UserFormItem type="modify" />
             </div>
         </div>
     </div>

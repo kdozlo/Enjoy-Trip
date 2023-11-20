@@ -1,10 +1,19 @@
 <script setup>
 import { storeToRefs } from "pinia";
+import { useRoute, useRouter } from "vue-router";
 import { useMemberStore } from "@/stores/member";
+
+const route = useRoute();
+const router = useRouter();
 
 const memberStore = useMemberStore();
 const { userInfo } = storeToRefs(memberStore);
-console.log(userInfo.value);
+
+function moveModify() {
+    const userid = userInfo.value.userId;
+    console.log(userInfo.value.userId);
+    router.push({ name: "user-modify", params: { userid } });
+}
 </script>
 
 <template>
@@ -39,7 +48,13 @@ console.log(userInfo.value);
                     </div>
                 </div>
                 <div>
-                    <button type="button" class="btn btn-outline-secondary mt-2">수정</button>
+                    <button
+                        type="button"
+                        class="btn btn-outline-secondary mt-2"
+                        @click="moveModify"
+                    >
+                        수정
+                    </button>
                 </div>
             </div>
         </div>

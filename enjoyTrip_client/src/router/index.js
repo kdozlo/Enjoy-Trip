@@ -6,20 +6,20 @@ import { storeToRefs } from "pinia";
 import { useMemberStore } from "@/stores/member";
 
 const onlyAuthUser = async (to, from, next) => {
-  const memberStore = useMemberStore();
-  const { userInfo, isValidToken } = storeToRefs(memberStore);
-  const { getUserInfo } = memberStore;
+    const memberStore = useMemberStore();
+    const { userInfo, isValidToken } = storeToRefs(memberStore);
+    const { getUserInfo } = memberStore;
 
-  let token = sessionStorage.getItem("accessToken");
+    let token = sessionStorage.getItem("accessToken");
 
-  if (userInfo.value != null && token) {
-    await getUserInfo(token);
-  }
-  if (!isValidToken.value || userInfo.value === null) {
-    next({ name: "user-login" });
-  } else {
-    next();
-  }
+    if (userInfo.value != null && token) {
+        await getUserInfo(token);
+    }
+    if (!isValidToken.value || userInfo.value === null) {
+        next({ name: "user-login" });
+    } else {
+        next();
+    }
 };
 
 const router = createRouter({
@@ -51,11 +51,12 @@ const router = createRouter({
                     beforeEnter: onlyAuthUser,
                     component: () => import("@/components/users/UserMyPage.vue"),
                 },
-                // {
-                //   path: "modify/:userid",
-                //   name: "user-modify",
-                //   component: () => import("@/components/users/UserModify.vue"),
-                // },
+                {
+                    path: "modify/:userid",
+                    name: "user-modify",
+                    beforeEnter: onlyAuthUser,
+                    component: () => import("@/components/users/UserModify.vue"),
+                },
             ],
         },
         {
