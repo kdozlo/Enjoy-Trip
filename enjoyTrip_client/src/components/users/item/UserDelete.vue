@@ -1,10 +1,14 @@
 <script setup>
 import { ref } from "vue";
 import { deleteUser } from "@/api/user";
+import { useMenuStore } from "@/stores/menu";
 import { useRoute, useRouter } from "vue-router";
 
 const route = useRoute();
 const router = useRouter();
+
+const menuStore = useMenuStore();
+const { changeMenuState } = menuStore;
 
 const userInfo = ref({});
 userInfo.value = JSON.parse(sessionStorage.getItem("memberStore")).userInfo;
@@ -17,26 +21,28 @@ const loginUser = ref({
 const removeUser = async () => {
     //user delete
     console.log("removeUser - ", loginUser.value);
+
     await deleteUser(
         { data: loginUser.value },
         (response) => {
             let msg = "회원탈퇴 과정에서 문제가 생겼습니다.";
-            if (response.status == 200) msg = "회원탈퇴가 완료되었습니다.";
-            //session storage - accessToken, refreshToken, memberStore clear
-            sessionStorage.clear("accessToken");
-            sessionStorage.clear("refreshToken");
-            sessionStorage.clear("memberStore");
+            if (loginUser.value.userPwd === "")
+                msg = "비밀번호를 입력해 주세요.";
+            console.log(response);
+            if (response.status == 202) {
+                msg = "회원탈퇴가 완료되었습니다.";
+                //session storage - accessToken, refreshToken, memberStore clear
+                sessionStorage.clear("accessToken");
+                sessionStorage.clear("refreshToken");
+                sessionStorage.clear("memberStore");
 
-            //local storage -  menuList change
-            changeMenuState();
+                //local storage -  menuList change
+                changeMenuState();
 
-            //local storage -  menuList change
-            changeMenuState();
-
+                //move main page
+                router.push("/");
+            }
             alert(msg);
-
-            //move main page
-            router.push("/");
         },
         (error) => console.log(error)
     );
