@@ -52,9 +52,8 @@
 	</sql>
 
 	<select id="listArticle" parameterType="map" resultMap="article">
-		select b.article_no, b.user_id, b.subject, b.content, b.hit, b.register_time, m.user_name
-		from board b, members m 
-		where b.user_id = m.user_id
+		select b.article_no, b.user_id, b.subject, b.content, b.hit, b.register_time, COALESCE(m.user_name, '(알수 없음)') as user_name
+		from board b left join members m on b.user_id = m.user_id
 		<include refid="search"></include>
 		order by b.article_no desc
 		limit #{start}, #{listsize}
