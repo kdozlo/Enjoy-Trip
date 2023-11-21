@@ -40,6 +40,15 @@ async function idCheck(userid, success, fail) {
     await local.get(`/memberapi/${userid}`).then(success).catch(fail);
 }
 
+async function deleteUser(user, success, fail) {
+    local.defaults.headers["Authorization"] =
+        sessionStorage.getItem("accessToken");
+    await local
+        .delete(`/memberapi/deletemember`, user)
+        .then(success)
+        .catch(fail);
+}
+
 export {
     userConfirm,
     findById,
@@ -48,4 +57,5 @@ export {
     registUser,
     modifyUser,
     idCheck,
+    deleteUser,
 };

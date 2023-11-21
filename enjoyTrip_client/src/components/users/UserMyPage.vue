@@ -1,10 +1,14 @@
 <script setup>
+import { ref } from "vue";
 import { storeToRefs } from "pinia";
 import { useRoute, useRouter } from "vue-router";
 import { useMemberStore } from "@/stores/member";
+import userDelete from "@/components/users/item/UserDelete.vue";
 
 const route = useRoute();
 const router = useRouter();
+
+const showModal = ref(false);
 
 const memberStore = useMemberStore();
 const { userInfo } = storeToRefs(memberStore);
@@ -14,9 +18,14 @@ function moveModify() {
     console.log(userInfo.value.userId);
     router.push({ name: "user-modify", params: { userid } });
 }
+
+function moveDelete() {
+    showModal.value = true;
+}
 </script>
 
 <template>
+    <userDelete v-if="showModal" @close-modal="showModal = false"></userDelete>
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-10">
@@ -37,10 +46,16 @@ function moveModify() {
                         <div class="col-md-8">
                             <div class="card-body text-start">
                                 <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">{{ userInfo.userId }}</li>
-                                    <li class="list-group-item">{{ userInfo.userName }}</li>
                                     <li class="list-group-item">
-                                        {{ userInfo.emailId }}@{{ userInfo.emailDomain }}
+                                        {{ userInfo.userId }}
+                                    </li>
+                                    <li class="list-group-item">
+                                        {{ userInfo.userName }}
+                                    </li>
+                                    <li class="list-group-item">
+                                        {{ userInfo.emailId }}@{{
+                                            userInfo.emailDomain
+                                        }}
                                     </li>
                                 </ul>
                             </div>
@@ -50,10 +65,17 @@ function moveModify() {
                 <div>
                     <button
                         type="button"
-                        class="btn btn-outline-secondary mt-2"
+                        class="btn btn-outline-primary mt-2"
                         @click="moveModify"
                     >
-                        수정
+                        회원정보 수정
+                    </button>
+                    <button
+                        type="button"
+                        class="btn btn-outline-danger ms-1 mt-2"
+                        @click="moveDelete"
+                    >
+                        회원 탈퇴
                     </button>
                 </div>
             </div>

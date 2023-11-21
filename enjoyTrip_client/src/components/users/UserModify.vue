@@ -170,6 +170,8 @@ function updateUser() {
     ) {
         alert("회원정보 변경 사항이 없습니다.");
     } else {
+        if (userPwdDiv.value === "blue" && userPwdCheckDiv.value === "blue")
+            userInfoDto.value.userPwd = null;
         modifyUser(
             {
                 userId: userInfoDto.value.userId,
@@ -294,7 +296,7 @@ function reset() {
                             type="submit"
                             class="btn btn-outline-primary mb-3"
                         >
-                            회원가입
+                            회원정보 수정
                         </button>
                         <button
                             type="button"
