@@ -103,20 +103,25 @@ public class MemberController {
     public ResponseEntity<Map<String, Object>> getInfo(
             @PathVariable("userId") @ApiParam(value = "인증할 회원의 아이디.", required = true) String userId,
             HttpServletRequest request) {
-//		logger.debug("userId : {} ", userId);
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = HttpStatus.ACCEPTED;
-        if (jwtUtil.checkToken(request.getHeader("Authorization"))) {
+        if (jwtUtil.checkToken(request.getHeader("Authorization"))) { //사용가능한 토큰인지 아닌지 확인
             log.info("사용 가능한 토큰!!!");
-            try {
+            if(userId.equals(jwtUtil.getUserId(request.getHeader("Authorization")))) { //비교를 토큰이랑 현재로그인된 아이디랑
+                log.info("회원정보 조회 가능!!!");
+                try {
 //				로그인 사용자 정보.
-                MemberDto memberDto = memberService.userInfo(userId);
-                resultMap.put("userInfo", memberDto);
-                status = HttpStatus.OK;
-            } catch (Exception e) {
-                log.error("정보조회 실패 : {}", e);
-                resultMap.put("message", e.getMessage());
-                status = HttpStatus.INTERNAL_SERVER_ERROR;
+                    MemberDto memberDto = memberService.userInfo(userId);
+                    resultMap.put("userInfo", memberDto);
+                    status = HttpStatus.OK;
+                } catch (Exception e) {
+                    log.error("정보조회 실패 : {}", e);
+                    resultMap.put("message", e.getMessage());
+                    status = HttpStatus.INTERNAL_SERVER_ERROR;
+                }
+            }else{
+                log.error("토큰과 일치하지 않습니다!!!");
+                status = HttpStatus.BAD_REQUEST;
             }
         } else {
             log.error("사용 불가능 토큰!!!");
@@ -129,66 +134,59 @@ public class MemberController {
     @ApiOperation(value = "회원정보수정")
     @PutMapping("/updatemember")
     public ResponseEntity<?> update(@RequestBody MemberDto member, HttpServletRequest request) {
-        Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = HttpStatus.ACCEPTED;
-        if (jwtUtil.checkToken(request.getHeader("Authorization"))) {
-            log.info("정보수정 가능!!!");
-            try {
-//				로그인 사용자 정보.
-                MemberDto memberDto = memberService.userInfo(member.getUserId());
-                status = HttpStatus.OK;
+        if (jwtUtil.checkToken(request.getHeader("Authorization"))) { //사용가능한 토큰인지
+            log.info("사용가능 토큰!!!");
+            if(member.getUserId().equals(jwtUtil.getUserId(request.getHeader("Authorization")))) { //비교를 토큰이랑 현재로그인된 아이디랑
+                log.info("정보수정 가능!!!");
                 try {
                     memberService.updateMember(member);
+                    log.info("정보수정 완료!!!");
                     return new ResponseEntity<String>("회원 정보가 수정되었습니다.", status);
                 } catch (Exception e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                    return exceptionHandling(e);
+                    log.error("회원정보수정 실패 : {}", e);
+                    status = HttpStatus.INTERNAL_SERVER_ERROR;
                 }
-            } catch (Exception e) {
-                log.error("회원정보수정 실패 : {}", e);
-                resultMap.put("message", e.getMessage());
-                status = HttpStatus.INTERNAL_SERVER_ERROR;
             }
-        } else {
+            else{
+                log.error("토큰과 일치하지 않습니다!!!");
+                status = HttpStatus.BAD_REQUEST;
+            }
+        } else { //사용가능 토큰이 아니면
             log.error("로그인이 만료되었습니다!!!");
             status = HttpStatus.UNAUTHORIZED;
         }
-        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+        return new ResponseEntity<String>(status);
     }
 
     // 회원 정보 탈퇴
     @ApiOperation(value = "회원탈퇴")
     @DeleteMapping("/deletemember")
     public ResponseEntity<?> delete(@RequestBody MemberDto member, HttpServletRequest request) {
-        Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status = HttpStatus.ACCEPTED;
-        if (jwtUtil.checkToken(request.getHeader("Authorization"))) {
-            log.info("회원탈퇴 가능!!!");
-            try {
-//				로그인 사용자 정보.
-                MemberDto memberDto = memberService.userInfo(member.getUserId());
-                status = HttpStatus.OK;
-                log.info("회원탈퇴 2");
+        if (jwtUtil.checkToken(request.getHeader("Authorization"))) { //사용가능한 토큰인지
+            log.info("사용가능 토큰!!!");
+            if(member.getUserId().equals(jwtUtil.getUserId(request.getHeader("Authorization")))) { //비교를 토큰이랑 현재로그인된 아이디랑
+                log.info("회원탈퇴 가능!!!");
                 try {
                     memberService.deleteMember(member);
-                    log.info("회원탈퇴 3");
-                    return new ResponseEntity<String>("탈퇴 되었습니다.", HttpStatus.OK);
+                    log.info("회원탈퇴 완료!!!");
+                    return new ResponseEntity<String>("회원 탈퇴 되었습니다.", status);
                 } catch (Exception e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                    return exceptionHandling(e);
+                    log.error("회원탈퇴 실패 : {}", e);
+                    status = HttpStatus.INTERNAL_SERVER_ERROR;
                 }
-            } catch (Exception e) {
-                log.error("회원탈퇴 실패 : {}", e);
-                resultMap.put("message", e.getMessage());
-                status = HttpStatus.INTERNAL_SERVER_ERROR;
             }
-        } else {
-            log.error("로그인이 만료되었습니다!!");
+            else{
+                log.error("토큰과 일치하지 않습니다!!!");
+                status = HttpStatus.BAD_REQUEST;
+            }
+        } else { //사용가능 토큰이 아니면
+            log.error("로그인이 만료되었습니다!!!");
             status = HttpStatus.UNAUTHORIZED;
         }
-        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+        return new ResponseEntity<String>(status);
+
     }
 
     @ApiOperation(value = "로그아웃", notes = "회원 정보를 담은 Token을 제거한다.", response = Map.class)
