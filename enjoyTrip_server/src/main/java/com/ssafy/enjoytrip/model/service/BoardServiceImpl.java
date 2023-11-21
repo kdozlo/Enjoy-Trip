@@ -104,8 +104,12 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	public void modifyArticle(BoardDto boardDto) throws Exception {
-		// TODO : BoardDaoImpl의 modifyArticle 호출
 		boardMapper.modifyArticle(boardDto);
+	}
+
+	@Override
+	public void deleteFile(int articleNo) throws Exception {
+		boardMapper.deleteFile(articleNo);
 	}
 
 //	@Override
@@ -127,4 +131,8 @@ public class BoardServiceImpl implements BoardService {
 		boardMapper.deleteArticle(articleNo);
 	}
 
+	@Override
+	public List<FileInfoDto> fileInfoList(int articleNo) throws Exception {
+		return null;
+	}
 }

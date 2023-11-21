@@ -1,29 +1,20 @@
 package com.ssafy.enjoytrip.controller;
 
+import java.io.File;
 import java.nio.charset.Charset;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
+import com.ssafy.enjoytrip.model.FileInfoDto;
 import com.ssafy.enjoytrip.model.service.MemberService;
 import com.ssafy.enjoytrip.util.JWTUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.ssafy.enjoytrip.model.BoardDto;
 import com.ssafy.enjoytrip.model.BoardListDto;
@@ -34,6 +25,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -45,9 +37,14 @@ import javax.servlet.http.HttpServletRequest;
 @Slf4j
 public class BoardController {
 
-	private static final Logger logger = LoggerFactory.getLogger(BoardController.class);
 //	private static final String SUCCESS = "success";
 //	private static final String FAIL = "fail";
+
+	@Value("${file.path}")
+	private String uploadPath;
+
+	@Value("${file.path.upload-images}")
+	private String uploadImgPath;
 
 	private BoardService boardService;
 	private JWTUtil jwtUtil;
@@ -60,8 +57,35 @@ public class BoardController {
 
 	@ApiOperation(value = "게시판 글작성", notes = "새로운 게시글 정보를 입력한다.")
 	@PostMapping
-	public ResponseEntity<?> writeArticle(@RequestBody @ApiParam(value = "게시글 정보.", required = true) BoardDto boardDto) {
+	public ResponseEntity<?> writeArticle(@RequestPart @ApiParam(value = "게시글 정보.", required = true) BoardDto boardDto
+	,@RequestPart @ApiParam(value = "파일정보.", required = false) MultipartFile[] files) throws Exception{
 		HttpStatus status = HttpStatus.ACCEPTED;
+		log.debug("MultipartFile.isEmpty : {}", files[0].isEmpty());
+		if (!files[0].isEmpty()) {
+			//파일이름 변경과정
+			String today = new SimpleDateFormat("yyMMdd").format(new Date());
+			String saveFolder = uploadPath + File.separator + today;
+			log.debug("저장 폴더 : {}", saveFolder);
+			File folder = new File(saveFolder);
+			if (!folder.exists())
+				folder.mkdirs();
+			List<FileInfoDto> fileInfos = new ArrayList<FileInfoDto>();
+			for (MultipartFile mfile : files) {
+				FileInfoDto fileInfoDto = new FileInfoDto();
+				String originalFileName = mfile.getOriginalFilename();
+				if (!originalFileName.isEmpty()) {
+					String saveFileName = UUID.randomUUID().toString()
+							+ originalFileName.substring(originalFileName.lastIndexOf('.'));
+					fileInfoDto.setSaveFolder(today);
+					fileInfoDto.setOriginalFile(originalFileName);
+					fileInfoDto.setSaveFile(saveFileName);
+					log.debug("원본 파일 이름 : {}, 실제 저장 파일 이름 : {}", mfile.getOriginalFilename(), saveFileName);
+					mfile.transferTo(new File(folder, saveFileName));
+				}
+				fileInfos.add(fileInfoDto);
+			}
+			boardDto.setFileInfos(fileInfos);
+		}
 		log.info("writeArticle boardDto - {}", boardDto);
 		try {
 			boardService.writeArticle(boardDto);
@@ -97,7 +121,7 @@ public class BoardController {
 	public ResponseEntity<BoardDto> getArticle(
 			@PathVariable("articleno") @ApiParam(value = "얻어올 글의 글번호.", required = true) int articleno)
 			throws Exception {
-		logger.info("getArticle - 호출 : " + articleno);
+		log.info("getArticle - 호출 : " + articleno);
 		boardService.updateHit(articleno);
 		System.out.println(boardService.getArticle(articleno));
 		return new ResponseEntity<BoardDto>(boardService.getArticle(articleno), HttpStatus.OK);
@@ -108,7 +132,7 @@ public class BoardController {
 	public ResponseEntity<BoardDto> getModifyArticle(
 			@PathVariable("articleno") @ApiParam(value = "얻어올 글의 글번호.", required = true) int articleno)
 			throws Exception {
-		logger.info("getModifyArticle - 호출 : " + articleno);
+		log.info("getModifyArticle - 호출 : " + articleno);
 		return new ResponseEntity<BoardDto>(boardService.getArticle(articleno), HttpStatus.OK);
 	}
 
@@ -147,7 +171,7 @@ public class BoardController {
 			log.info("사용가능 토큰!!!");
 			if(userId.equals(jwtUtil.getUserId(request.getHeader("Authorization")))) { //비교를 토큰이랑 현재로그인된 아이디랑
 				try {
-					logger.info("게시글 삭제 - 호출");
+					log.info("게시글 삭제 - 호출");
 					boardService.deleteArticle(articleno);
 				} catch (Exception e) {
 					log.error("게시글 삭제 실패 : {}", e);
