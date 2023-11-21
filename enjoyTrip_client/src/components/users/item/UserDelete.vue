@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
 import { deleteUser } from "@/api/user";
 import { useRoute, useRouter } from "vue-router";
 
@@ -104,14 +104,14 @@ const removeUser = async () => {
 .black-bg {
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(0, 0, 0, 0.519);
     position: fixed;
     z-index: 1000;
 }
 
 .white-bg {
     width: 50%;
-    margin: 80px auto;
+    margin: 40px auto;
     background: white;
     border-style: solid;
     border-color: black;
