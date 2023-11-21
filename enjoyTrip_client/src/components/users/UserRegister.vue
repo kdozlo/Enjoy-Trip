@@ -152,14 +152,14 @@ function email_check(emailDomain) {
     return reg.test(emailDomain);
 }
 
-function updateUser() {
+function addUser() {
     if (
         userNameDiv.value === "red" ||
         userIdDiv.value === "red" ||
-        userPwdDiv === "red" ||
-        userPwdCheckDiv === "red" ||
-        emailIdDiv === "red" ||
-        emailDomainDiv === "red"
+        userPwdDiv.value === "red" ||
+        userPwdCheckDiv.value === "red" ||
+        emailIdDiv.value === "red" ||
+        emailDomainDiv.value === "red"
     ) {
         alert("회원 가입 조건을 다시 확인해 주세요.");
     } else if (emailIdErrMsg.value) {
@@ -213,7 +213,7 @@ function reset() {
                 </h2>
             </div>
             <div class="col-lg-7 text-start">
-                <form @submit.prevent="updateUser">
+                <form @submit.prevent="addUser">
                     <div class="row mb-4">
                         <label for="username" class="form-label">이름 : </label>
                         <div class="col-7">
