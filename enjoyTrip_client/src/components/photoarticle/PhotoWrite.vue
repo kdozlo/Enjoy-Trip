@@ -4,8 +4,7 @@ import { useRoute, useRouter } from "vue-router";
 import { useMemberStore } from "@/stores/member";
 import { storeToRefs } from "pinia";
 import $ from "jquery";
-import { writePhotoArticle } from "@/api/photoArticle";
-import axios from "axios";
+import { writePhotoArticle, listPhotoArticle } from "@/api/photoArticle";
 
 const router = useRouter();
 const route = useRoute();
@@ -63,67 +62,60 @@ function onSubmit() {
         (response) => {
             let msg = "글등록 처리시 문제 발생했습니다.";
             if (response.status == 201) msg = "글등록이 완료되었습니다.";
+            getlistPhotoArticle();
             alert(msg);
-            moveList();
         },
         (error) => console.log(error)
     );
 }
 
 function handleFileChange(event) {
+    $("#imagePreview").empty();
     // 파일 선택 시 호출되는 함수
     photoArticle.value.file = event.target.files[0];
+
+    if (!photoArticle.value.file.type.match("image/.*")) {
+        alert("이미지 확장자만 업로드 가능합니다.");
+        return;
+    }
+    var reader = new FileReader();
+    reader.onload = function (e) {
+        var html = `<img src=${e.target.result} style="width: 60%; height: 80%"/>`;
+        $("#imagePreview").append(html);
+    };
+    reader.readAsDataURL(photoArticle.value.file);
+
     console.log("file - ", photoArticle.value.file);
 }
-
-const readInputFile = (e) => {
-    // 미리보기 기능구현
-    $("#imagePreview").empty();
-    var files = e.target.files;
-    var fileArr = Array.prototype.slice.call(files);
-    console.log("image file - ", fileArr);
-    photoArticle.value.file = fileArr[0];
-    console.log(photoArticle.value);
-    fileArr.forEach(function (f) {
-        if (!f.type.match("image/.*")) {
-            alert("이미지 확장자만 업로드 가능합니다.");
-            return;
-        }
-        var reader = new FileReader();
-        reader.onload = function (e) {
-            var html = `<img src=${e.target.result} style="width: 60%; height: 80%"/>`;
-            $("#imagePreview").append(html);
-        };
-        reader.readAsDataURL(f);
-    });
-};
 </script>
 
 <template>
     <div class="black-bg">
         <div class="white-bg">
             <form @submit.prevent="onSubmit">
-                <div class="mb-3">
-                    <input
-                        type="text"
-                        class="form-control text-center"
-                        name="userid"
-                        :value="photoArticle.userId"
-                        readonly
-                    />
-                </div>
-                <div class="mb-3">
-                    <!-- <div class="custom-file">
+                <div class="mb-3 row">
+                    <div class="col-sm-4">
+                        <div class="form-control text-center">작성자 ID</div>
+                    </div>
+                    <div class="col-sm-8">
                         <input
-                            id="customFile"
-                            type="file"
-                            @change="readInputFile"
+                            type="text"
+                            class="form-control text-center"
+                            name="userid"
+                            :value="photoArticle.userId"
+                            readonly
                         />
-                    </div> -->
-                    <!-- <div id="imagePreview">
-                        <img id="img" />
-                    </div> -->
+                    </div>
+                </div>
+                <div class="mb-3 row">
                     <input type="file" @change="handleFileChange" />
+                    <div id="imagePreview" style="width: 60vh; height: 35vh">
+                        <img
+                            id="img"
+                            src="@/assets/no-image-removebg.png "
+                            style="width: 60%; height: 80%"
+                        />
+                    </div>
                 </div>
                 <div class="mb-3">
                     <textarea
@@ -135,11 +127,11 @@ const readInputFile = (e) => {
                     ></textarea>
                 </div>
                 <div class="col-auto text-center">
-                    <button type="submit" class="btn btn-outline-primary mb-3">
+                    <button type="submit" class="btn btn-outline-primary mb-7">
                         글작성
                     </button>
                     <button
-                        class="btn btn-outline-danger mb-3 ms-1"
+                        class="btn btn-outline-danger mb-7 ms-1"
                         @click="$emit('close-modal')"
                     >
                         닫기
@@ -170,7 +162,7 @@ const readInputFile = (e) => {
     z-index: 10000;
 }
 .white-bg {
-    width: 50%;
+    width: 40%;
     height: 70%;
     margin: 40px;
     background: white;
