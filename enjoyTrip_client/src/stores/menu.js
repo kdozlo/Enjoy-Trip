@@ -9,11 +9,17 @@ export const useMenuStore = defineStore("menuStore", () => {
         { name: "로그아웃", show: false, routeName: "user-logout" },
     ]);
 
-    if (localStorage.getItem("menuList") == null)
+    if (
+        localStorage.getItem("menuList") == null ||
+        sessionStorage.getItem("memberStore") == null
+    )
         localStorage.setItem("menuList", JSON.stringify(menuList.value));
 
     const changeMenuState = () => {
-        menuList.value = menuList.value.map((item) => ({ ...item, show: !item.show }));
+        menuList.value = menuList.value.map((item) => ({
+            ...item,
+            show: !item.show,
+        }));
         localStorage.setItem("menuList", JSON.stringify(menuList.value));
     };
 

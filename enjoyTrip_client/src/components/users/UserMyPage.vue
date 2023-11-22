@@ -26,7 +26,7 @@ function moveDelete() {
 
 <template>
     <userDelete v-if="showModal" @close-modal="showModal = false"></userDelete>
-    <div class="container">
+    <div class="container text-center mt-3" style="width: 100vw; height: 80vh">
         <div class="row justify-content-center">
             <div class="col-lg-10">
                 <h2 class="my-3 py-3 shadow-sm bg-light text-center">

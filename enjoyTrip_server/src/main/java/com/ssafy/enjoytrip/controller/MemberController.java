@@ -185,7 +185,7 @@ public class MemberController {
             log.error("로그인이 만료되었습니다!!!");
             status = HttpStatus.UNAUTHORIZED;
         }
-        return new ResponseEntity<String>(status);
+        return new ResponseEntity<String>("", status);
 
     }
 

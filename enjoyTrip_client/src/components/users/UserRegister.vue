@@ -162,10 +162,6 @@ function addUser() {
         emailDomainDiv.value === "red"
     ) {
         alert("회원 가입 조건을 다시 확인해 주세요.");
-    } else if (emailIdErrMsg.value) {
-        alert(emailIdErrMsg.value);
-    } else if (emailDomainErrMsg.value) {
-        alert(emailDomainErrMsg.value);
     } else {
         console.log("회원가입을 하자!!!", userInfoDto.value);
         registUser(
