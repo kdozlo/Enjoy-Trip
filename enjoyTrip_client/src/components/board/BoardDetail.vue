@@ -1,13 +1,17 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import { storeToRefs } from "pinia";
+import { useMemberStore } from "@/stores/member";
 import { detailArticle, deleteArticle } from "@/api/board";
 
 const route = useRoute();
 const router = useRouter();
 
-// const articleno = ref(route.params.articleno);
 const { articleno } = route.params;
+
+const memberStore = useMemberStore();
+const { userInfo } = storeToRefs(memberStore);
 
 const article = ref({});
 
@@ -41,10 +45,11 @@ function onDeleteArticle() {
     // const { articleno } = route.params;
     console.log(articleno + "번글 삭제하러 가자!!!");
     deleteArticle(
+        userInfo.value.userId,
         articleno,
         (response) => {
             alert("글이 삭제되었습니다.");
-            if (response.status == 200) moveList();
+            if (response.status == 202) moveList();
         },
         (error) => {
             console.log(error);
@@ -73,9 +78,13 @@ function onDeleteArticle() {
                                 src="https://raw.githubusercontent.com/twbs/icons/main/icons/person-fill.svg"
                             />
                             <p>
-                                <span class="fw-bold">{{ article.userName }}</span> <br />
+                                <span class="fw-bold">{{
+                                    article.userName
+                                }}</span>
+                                <br />
                                 <span class="text-secondary fw-light">
-                                    {{ article.registerTime }} 조회 : {{ article.hit }}
+                                    {{ article.registerTime }} 조회 :
+                                    {{ article.hit }}
                                 </span>
                             </p>
                         </div>

@@ -50,38 +50,38 @@ public class BoardController {
 
 	@ApiOperation(value = "게시판 글작성", notes = "새로운 게시글 정보를 입력한다.")
 	@PostMapping
-	public ResponseEntity<?> writeArticle(@RequestPart @ApiParam(value = "게시글 정보.", required = true) BoardDto boardDto
-	,@RequestPart @ApiParam(value = "파일정보.", required = false) MultipartFile[] files) throws Exception{
+	public ResponseEntity<?> writeArticle(@RequestBody @ApiParam(value = "게시글 정보.", required = true) BoardDto boardDto
+	,@RequestBody @ApiParam(value = "파일정보.", required = false) MultipartFile[] files) throws Exception{
 		HttpStatus status = HttpStatus.ACCEPTED;
-		log.debug("MultipartFile.isEmpty : {}", files[0].isEmpty());
-		if (!files[0].isEmpty()) {
-			//파일이름 변경과정
-			String today = new SimpleDateFormat("yyMMdd").format(new Date());
-
-			String saveFolder = System.getProperty("user.dir") + "/../imgServer" + File.separator + today;
-			
-			log.debug("저장 폴더 : {}", saveFolder);
-			File folder = new File(saveFolder);
-			if (!folder.exists())
-				folder.mkdirs();
-			List<FileInfoDto> fileInfos = new ArrayList<FileInfoDto>();
-			for (MultipartFile mfile : files) {
-				FileInfoDto fileInfoDto = new FileInfoDto();
-				String originalFileName = mfile.getOriginalFilename();
-				if (!originalFileName.isEmpty()) {
-					String saveFileName = UUID.randomUUID().toString()
-							+ originalFileName.substring(originalFileName.lastIndexOf('.'));
-					fileInfoDto.setSaveFolder(today);
-					fileInfoDto.setOriginalFile(originalFileName);
-					fileInfoDto.setSaveFile(saveFileName);
-					log.debug("원본 파일 이름 : {}, 실제 저장 파일 이름 : {}", mfile.getOriginalFilename(), saveFileName);
-					mfile.transferTo(new File(folder, saveFileName));
-				}
-				fileInfos.add(fileInfoDto);
-			}
-			boardDto.setFileInfos(fileInfos);
-		}
-		log.info("writeArticle boardDto - {}", boardDto);
+		System.out.println("writeArticle boardDto " + boardDto);
+//		if (!files[0].isEmpty()) {
+//			//파일이름 변경과정
+//			String today = new SimpleDateFormat("yyMMdd").format(new Date());
+//
+//			String saveFolder = System.getProperty("user.dir") + "/../imgServer" + File.separator + today;
+//			
+//			log.debug("저장 폴더 : {}", saveFolder);
+//			File folder = new File(saveFolder);
+//			if (!folder.exists())
+//				folder.mkdirs();
+//			List<FileInfoDto> fileInfos = new ArrayList<FileInfoDto>();
+//			for (MultipartFile mfile : files) {
+//				FileInfoDto fileInfoDto = new FileInfoDto();
+//				String originalFileName = mfile.getOriginalFilename();
+//				if (!originalFileName.isEmpty()) {
+//					String saveFileName = UUID.randomUUID().toString()
+//							+ originalFileName.substring(originalFileName.lastIndexOf('.'));
+//					fileInfoDto.setSaveFolder(today);
+//					fileInfoDto.setOriginalFile(originalFileName);
+//					fileInfoDto.setSaveFile(saveFileName);
+//					log.debug("원본 파일 이름 : {}, 실제 저장 파일 이름 : {}", mfile.getOriginalFilename(), saveFileName);
+//					mfile.transferTo(new File(folder, saveFileName));
+//				}
+//				fileInfos.add(fileInfoDto);
+//			}
+//			boardDto.setFileInfos(fileInfos);
+//		}
+		
 		try {
 			boardService.writeArticle(boardDto);
 //			return ResponseEntity.ok().build();
@@ -137,6 +137,8 @@ public class BoardController {
 	public ResponseEntity<String> modifyArticle(
 			@RequestBody @ApiParam(value = "수정할 글정보.", required = true) BoardDto boardDto ,HttpServletRequest request) throws Exception {
 		HttpStatus status = HttpStatus.ACCEPTED;
+		System.out.println(boardDto);
+		System.out.println(request.getHeader("Authorization"));
 		if (jwtUtil.checkToken(request.getHeader("Authorization"))) { //사용가능한 토큰인지
 			log.info("사용가능 토큰!!!");
 			if(boardDto.getUserId().equals(jwtUtil.getUserId(request.getHeader("Authorization")))) { //비교를 토큰이랑 현재로그인된 아이디랑
@@ -155,7 +157,7 @@ public class BoardController {
 			log.error("로그인이 만료되었습니다!!!");
 			status = HttpStatus.UNAUTHORIZED;
 		}
-		return new ResponseEntity<String>(status);
+		return new ResponseEntity<String>("", status);
 	}
 	
 	@ApiOperation(value = "게시판 글삭제", notes = "글번호에 해당하는 게시글의 정보를 삭제한다. 그리고 DB삭제 성공여부에 따라 'success' 또는 'fail' 문자열을 반환한다.", response = String.class)

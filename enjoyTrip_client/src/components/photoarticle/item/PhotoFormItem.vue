@@ -91,7 +91,7 @@ function updateArticle() {
         article.value,
         (response) => {
             let msg = "글수정 처리시 문제 발생했습니다.";
-            if (response.status == 202) msg = "글정보 수정이 완료되었습니다.";
+            if (response.status == 200) msg = "글정보 수정이 완료되었습니다.";
             alert(msg);
             moveList();
         },
@@ -127,28 +127,14 @@ function moveList() {
         </div>
         <div class="mb-3">
             <label for="content" class="form-label">내용 : </label>
-            <textarea
-                class="form-control"
-                v-model="article.content"
-                rows="10"
-            ></textarea>
+            <textarea class="form-control" v-model="article.content" rows="10"></textarea>
         </div>
         <div class="col-auto text-center">
-            <button
-                type="submit"
-                class="btn btn-outline-primary mb-3"
-                v-if="type === 'regist'"
-            >
+            <button type="submit" class="btn btn-outline-primary mb-3" v-if="type === 'regist'">
                 글작성
             </button>
-            <button type="submit" class="btn btn-outline-success mb-3" v-else>
-                글수정
-            </button>
-            <button
-                type="button"
-                class="btn btn-outline-danger mb-3 ms-1"
-                @click="moveList"
-            >
+            <button type="submit" class="btn btn-outline-success mb-3" v-else>글수정</button>
+            <button type="button" class="btn btn-outline-danger mb-3 ms-1" @click="moveList">
                 목록으로이동...
             </button>
         </div>
