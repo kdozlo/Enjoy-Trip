@@ -100,24 +100,6 @@ public class BoardController {
 		}
 	}
 
-	@ApiOperation(value = "댓글작성", notes = "글번호에 해당하는 게시글에 댓글작성")
-	@PostMapping("/reply")
-	public ResponseEntity<?> writeReply(
-			@RequestBody @ApiParam(value = "댓글 작성 내용.", required = true) ReplyDto replyDto)
-			throws Exception {
-		HttpStatus status = HttpStatus.ACCEPTED;
-		log.info(replyDto.getContent());
-		log.info("writeReply - 호출 : {}" + replyDto.getArticleNo());
-		log.info(replyDto.getUserId());
-		try {
-			log.info("writeReply - 호출 : {}" + replyDto.getArticleNo());
-			replyService.writeReply(replyDto);
-		} catch (Exception e) {
-			log.error("댓글작성 실패 : {}", e);
-			return new ResponseEntity<String>(status);
-		}
-		return new ResponseEntity<String>(status);
-	}
 
 	@ApiOperation(value = "게시판 글목록", notes = "모든 게시글의 정보를 반환한다.", response = List.class)
 	@ApiResponses({ @ApiResponse(code = 200, message = "회원목록 OK!!"), @ApiResponse(code = 404, message = "페이지없어!!"),
@@ -147,16 +129,6 @@ public class BoardController {
 		boardService.updateHit(articleno);
 		System.out.println(boardService.getArticle(articleno));
 		return new ResponseEntity<BoardDto>(boardService.getArticle(articleno), HttpStatus.OK);
-	}
-
-	@ApiOperation(value = "댓글보기", notes = "글번호에 해당하는 게시글의 댓글들을 반환한다.")
-	@GetMapping("/reply/{articleno}")
-	public ResponseEntity<List<ReplyDto>> listReply(
-			@PathVariable("articleno") @ApiParam(value = "얻어올 댓글의 글번호.", required = true) int articleno)
-			throws Exception {
-		log.info("listReply - 호출 : " + articleno);
-		replyService.updateLike(articleno);
-		return new ResponseEntity<List<ReplyDto>>(replyService.listReply(articleno), HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "수정 할 글 얻기", notes = "글번호에 해당하는 게시글의 정보를 반환한다.", response = BoardDto.class)

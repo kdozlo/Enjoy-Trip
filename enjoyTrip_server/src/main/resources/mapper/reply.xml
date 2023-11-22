@@ -16,9 +16,6 @@
 	<insert id="writeReply" parameterType="replyDto">
 		insert into reply (content,user_id,article_no)
 		values (#{content},#{userId},#{articleNo})
-		<selectKey resultType="int" keyProperty="replyId" order="AFTER">
-		select last_insert_id()
-	</selectKey>
 	</insert>
 
 	<select id="listReply" parameterType="int" resultMap="reply">
@@ -27,14 +24,7 @@
 		where b.user_id = b.article_no
 		order by r.push_like desc
 	</select>
-	
-	<select id="getTotalReplyCount" parameterType="map" resultType="int">
-		select count(reply_id)
-		from reply
-		<where>
-			<include refid="search"></include>
-		</where>
-	</select>
+
 	
 	<update id="updateLike" parameterType="int">
 		update reply

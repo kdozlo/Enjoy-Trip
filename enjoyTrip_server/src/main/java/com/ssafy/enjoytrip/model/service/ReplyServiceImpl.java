@@ -20,13 +20,12 @@ public class ReplyServiceImpl implements ReplyService {
 	private ReplyMapper replyMapper;
 
 	@Autowired
-	public ReplyServiceImpl(BoardMapper boardMapper) {
+	public ReplyServiceImpl(ReplyMapper replyMapper) {
 		super();
 		this.replyMapper = replyMapper;
 	}
 
 	@Override
-	@Transactional
 	public void writeReply(ReplyDto replyDto) throws Exception {
 		replyMapper.writeReply(replyDto);
 	}
