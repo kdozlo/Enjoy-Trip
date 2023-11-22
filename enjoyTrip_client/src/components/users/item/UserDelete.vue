@@ -109,7 +109,7 @@ const removeUser = async () => {
 <style scoped>
 .black-bg {
     width: 100%;
-    height: 100%;
+    height: 90%;
     position: fixed;
     left: 0;
     top: 1;

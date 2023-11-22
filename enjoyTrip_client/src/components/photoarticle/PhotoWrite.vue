@@ -1,20 +1,183 @@
 <script setup>
-import BoardFormItem from "./item/BoardFormItem.vue";
+import { ref, onMounted } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import { useMemberStore } from "@/stores/member";
+import { storeToRefs } from "pinia";
+import $ from "jquery";
+import { writePhotoArticle } from "@/api/photoArticle";
+import axios from "axios";
+
+const router = useRouter();
+const route = useRoute();
+
+const photoArticle = ref({
+    userId: "",
+    content: "",
+    file: null,
+});
+0;
+onMounted(() => {
+    async (to, from, next) => {
+        const memberStore = useMemberStore();
+        const { userInfo, isValidToken } = storeToRefs(memberStore);
+        const { getUserInfo } = memberStore;
+
+        let token = sessionStorage.getItem("accessToken");
+
+        if (userInfo.value != null && token) {
+            await getUserInfo(token);
+        }
+        if (!isValidToken.value || userInfo.value === null) {
+            next({ name: "user-login" });
+        } else {
+            next();
+        }
+    };
+});
+
+const memberStore = useMemberStore();
+const { userInfo } = storeToRefs(memberStore);
+
+photoArticle.value.userId = userInfo.value.userId;
+
+function onSubmit() {
+    console.log("포토글을 등록하자!!", photoArticle.value);
+
+    const formData = new FormData();
+    const photoArticleDto = {
+        userId: photoArticle.value.userId,
+        content: photoArticle.value.content,
+    };
+
+    formData.append(
+        "photoArticleDto",
+        new Blob([JSON.stringify(photoArticleDto)], {
+            type: "application/json",
+        })
+    );
+    formData.append("file", photoArticle.value.file);
+    console.log(photoArticle.value.file);
+    console.log(formData);
+    writePhotoArticle(
+        formData,
+        (response) => {
+            let msg = "글등록 처리시 문제 발생했습니다.";
+            if (response.status == 201) msg = "글등록이 완료되었습니다.";
+            alert(msg);
+            moveList();
+        },
+        (error) => console.log(error)
+    );
+}
+
+function handleFileChange(event) {
+    // 파일 선택 시 호출되는 함수
+    photoArticle.value.file = event.target.files[0];
+    console.log("file - ", photoArticle.value.file);
+}
+
+const readInputFile = (e) => {
+    // 미리보기 기능구현
+    $("#imagePreview").empty();
+    var files = e.target.files;
+    var fileArr = Array.prototype.slice.call(files);
+    console.log("image file - ", fileArr);
+    photoArticle.value.file = fileArr[0];
+    console.log(photoArticle.value);
+    fileArr.forEach(function (f) {
+        if (!f.type.match("image/.*")) {
+            alert("이미지 확장자만 업로드 가능합니다.");
+            return;
+        }
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            var html = `<img src=${e.target.result} style="width: 60%; height: 80%"/>`;
+            $("#imagePreview").append(html);
+        };
+        reader.readAsDataURL(f);
+    });
+};
 </script>
 
 <template>
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-lg-10">
-        <h2 class="my-3 py-3 shadow-sm bg-light text-center">
-          <mark class="sky">글쓰기</mark>
-        </h2>
-      </div>
-      <div class="col-lg-10 text-start">
-        <BoardFormItem type="regist" />
-      </div>
+    <div class="black-bg">
+        <div class="white-bg">
+            <form @submit.prevent="onSubmit">
+                <div class="mb-3">
+                    <input
+                        type="text"
+                        class="form-control text-center"
+                        name="userid"
+                        :value="photoArticle.userId"
+                        readonly
+                    />
+                </div>
+                <div class="mb-3">
+                    <!-- <div class="custom-file">
+                        <input
+                            id="customFile"
+                            type="file"
+                            @change="readInputFile"
+                        />
+                    </div> -->
+                    <!-- <div id="imagePreview">
+                        <img id="img" />
+                    </div> -->
+                    <input type="file" @change="handleFileChange" />
+                </div>
+                <div class="mb-3">
+                    <textarea
+                        class="form-control"
+                        name="content"
+                        v-model="photoArticle.content"
+                        rows="2"
+                        placeholder="30자 이내로 내용 입력 해주세요..."
+                    ></textarea>
+                </div>
+                <div class="col-auto text-center">
+                    <button type="submit" class="btn btn-outline-primary mb-3">
+                        글작성
+                    </button>
+                    <button
+                        class="btn btn-outline-danger mb-3 ms-1"
+                        @click="$emit('close-modal')"
+                    >
+                        닫기
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
-  </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.black-bg {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    left: 0;
+    top: 2%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.25);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    backdrop-filter: blur(1.5px);
+    -webkit-backdrop-filter: blur(1.5px);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    z-index: 10000;
+}
+.white-bg {
+    width: 50%;
+    height: 70%;
+    margin: 40px;
+    background: white;
+    border-style: solid;
+    border-color: black;
+    border-radius: 10px;
+    border-width: 2px;
+    padding: 20px;
+}
+</style>

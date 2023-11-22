@@ -6,11 +6,9 @@ function listPhotoArticle(param, success, fail) {
     local.get(`/photoarticle`, { params: param }).then(success).catch(fail);
 }
 
-function writPhotoArticle(article, success, fail) {
+function writePhotoArticle(article, success, fail) {
     console.log("boardjs article", article);
-    local
-        .post(`/photoarticle`, JSON.stringify(article))
-        .then(success)
-        .catch(fail);
+    local.defaults.headers["Content-Type"] = "multipart/form-data";
+    local.post(`/photoarticle`, article).then(success).catch(fail);
 }
-export { listPhotoArticle, writPhotoArticle };
+export { listPhotoArticle, writePhotoArticle };

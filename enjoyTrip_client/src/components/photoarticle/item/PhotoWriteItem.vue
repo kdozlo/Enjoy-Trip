@@ -10,9 +10,8 @@ const props = defineProps({ type: String });
 
 const isUseId = ref(false);
 
-const article = ref({
-    articleNo: 0,
-    subject: "",
+const photoArticle = ref({
+    userId: "",
     content: "",
     userId: "",
     userName: "",
@@ -127,14 +126,28 @@ function moveList() {
         </div>
         <div class="mb-3">
             <label for="content" class="form-label">내용 : </label>
-            <textarea class="form-control" v-model="article.content" rows="10"></textarea>
+            <textarea
+                class="form-control"
+                v-model="article.content"
+                rows="10"
+            ></textarea>
         </div>
         <div class="col-auto text-center">
-            <button type="submit" class="btn btn-outline-primary mb-3" v-if="type === 'regist'">
+            <button
+                type="submit"
+                class="btn btn-outline-primary mb-3"
+                v-if="type === 'regist'"
+            >
                 글작성
             </button>
-            <button type="submit" class="btn btn-outline-success mb-3" v-else>글수정</button>
-            <button type="button" class="btn btn-outline-danger mb-3 ms-1" @click="moveList">
+            <button type="submit" class="btn btn-outline-success mb-3" v-else>
+                글수정
+            </button>
+            <button
+                type="button"
+                class="btn btn-outline-danger mb-3 ms-1"
+                @click="moveList"
+            >
                 목록으로이동...
             </button>
         </div>

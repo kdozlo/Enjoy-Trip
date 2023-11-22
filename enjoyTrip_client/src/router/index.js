@@ -109,10 +109,6 @@ const router = createRouter({
         {
             path: "/photo-article",
             name: "photoArticle",
-            // component: TheBoardView,
-            // route level code-splitting
-            // this generates a separate chunk (About.[hash].js) for this route
-            // which is lazy-loaded when the route is visited.
             component: () => import("../views/ThePhotoArticleView.vue"),
             redirect: { name: "photo-article-list" },
             children: [
@@ -121,13 +117,6 @@ const router = createRouter({
                     name: "photo-article-list",
                     component: () =>
                         import("@/components/photoarticle/PhotoList.vue"),
-                },
-                {
-                    path: "write",
-                    name: "photo-write",
-                    beforeEnter: onlyAuthUser,
-                    component: () =>
-                        import("@/components/photoarticle/PhotoWrite.vue"),
                 },
             ],
         },

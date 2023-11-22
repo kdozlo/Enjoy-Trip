@@ -63,7 +63,9 @@ const logout = async () => {
                         >
                     </li>
                     <li class="nav-item">
-                        <router-link :to="{ name: 'board' }" class="nav-link"
+                        <router-link
+                            :to="{ name: 'photoArticle' }"
+                            class="nav-link"
                             >포토게시판</router-link
                         >
                     </li>

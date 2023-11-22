@@ -1,13 +1,16 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
-import { listArticle } from "@/api/board.js";
+import { listPhotoArticle } from "@/api/photoArticle.js";
+import photoWrite from "@/components/photoarticle/PhotoWrite.vue";
 
 import VSelect from "@/components/common/VSelect.vue";
-import BoardListItem from "@/components/board/item/BoardListItem.vue";
+import PhotoListItem from "@/components/photoarticle/item/PhotoListItem.vue";
 import PageNavigation from "@/components/common/PageNavigation.vue";
 
 const router = useRouter();
+
+const showModal = ref(false);
 
 const selectOption = ref([
     { text: "검색조건", value: "" },
@@ -27,29 +30,27 @@ const param = ref({
     word: "",
 });
 
-onMounted(() => {
-    getArticleList();
-});
+onMounted(() => {});
 
 const changeKey = (val) => {
     console.log("BoarList에서 선택한 조건 : " + val);
     param.value.key = val;
 };
 
-const getArticleList = () => {
-    console.log("서버에서 글목록 얻어오자!!!", param.value);
-    listArticle(
-        param.value,
-        ({ data }) => {
-            articles.value = data.articles;
-            currentPage.value = data.currentPage;
-            totalPage.value = data.totalPageCount;
-        },
-        (error) => {
-            console.log(error);
-        }
-    );
-};
+// const getArticleList = () => {
+//     console.log("서버에서 글목록 얻어오자!!!", param.value);
+//     listArticle(
+//         param.value,
+//         ({ data }) => {
+//             articles.value = data.articles;
+//             currentPage.value = data.currentPage;
+//             totalPage.value = data.totalPageCount;
+//         },
+//         (error) => {
+//             console.log(error);
+//         }
+//     );
+// };
 
 const onPageChange = (val) => {
     console.log(val + "번 페이지로 이동 준비 끝!!!");
@@ -59,11 +60,12 @@ const onPageChange = (val) => {
 };
 
 const moveWrite = () => {
-    router.push({ name: "article-write" });
+    showModal.value = true;
 };
 </script>
 
 <template>
+    <photoWrite v-if="showModal" @close-modal="showModal = false"></photoWrite>
     <div class="container" style="width: 100vw; height: 80vh">
         <div class="row justify-content-center">
             <div class="col-lg-10">
@@ -117,11 +119,11 @@ const moveWrite = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        <BoardListItem
+                        <PhotoListItem
                             v-for="article in articles"
                             :key="article.articleNo"
                             :article="article"
-                        ></BoardListItem>
+                        ></PhotoListItem>
                     </tbody>
                 </table>
             </div>
