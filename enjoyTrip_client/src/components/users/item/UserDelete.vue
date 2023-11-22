@@ -109,10 +109,10 @@ const removeUser = async () => {
 <style scoped>
 .black-bg {
     width: 100%;
-    height: 90%;
+    height: 100%;
     position: fixed;
     left: 0;
-    top: 1;
+    top: 2%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -123,7 +123,7 @@ const removeUser = async () => {
     -webkit-backdrop-filter: blur(1.5px);
     border-radius: 10px;
     border: 1px solid rgba(255, 255, 255, 0.18);
-    z-index: 1000;
+    z-index: 10000;
 }
 
 .white-bg {

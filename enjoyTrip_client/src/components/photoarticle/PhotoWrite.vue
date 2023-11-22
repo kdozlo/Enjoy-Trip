@@ -109,8 +109,9 @@ function handleFileChange(event) {
                 </div>
                 <div class="mb-3 row">
                     <input type="file" @change="handleFileChange" />
-                    <div id="imagePreview" style="width: 60vh; height: 35vh">
+                    <div id="imagePreview" style="width: 60vh; height: 60vh">
                         <img
+                            class="img-responsive center-block"
                             id="img"
                             src="@/assets/no-image-removebg.png "
                             style="width: 60%; height: 80%"
@@ -162,9 +163,9 @@ function handleFileChange(event) {
     z-index: 10000;
 }
 .white-bg {
-    width: 40%;
-    height: 70%;
-    margin: 40px;
+    width: 38%;
+    height: auto;
+    margin: 40px auto;
     background: white;
     border-style: solid;
     border-color: black;
