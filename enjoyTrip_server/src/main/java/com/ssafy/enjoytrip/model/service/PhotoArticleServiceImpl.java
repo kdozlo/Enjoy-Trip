@@ -6,12 +6,14 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.enjoytrip.model.PhotoArticleDto;
 import com.ssafy.enjoytrip.model.PhotoArticleListDto;
 import com.ssafy.enjoytrip.model.mapper.PhotoArticleMapper;
 
+@Service
 public class PhotoArticleServiceImpl implements PhotoArticleService{
 	
 	private PhotoArticleMapper photoArticleMapper;
