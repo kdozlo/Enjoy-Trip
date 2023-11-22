@@ -37,15 +37,6 @@ import javax.servlet.http.HttpServletRequest;
 @Slf4j
 public class BoardController {
 
-//	private static final String SUCCESS = "success";
-//	private static final String FAIL = "fail";
-
-	@Value("${file.path}")
-	private String uploadPath;
-
-	@Value("${file.path.upload-images}")
-	private String uploadImgPath;
-
 	private BoardService boardService;
 	private JWTUtil jwtUtil;
 
@@ -64,7 +55,9 @@ public class BoardController {
 		if (!files[0].isEmpty()) {
 			//파일이름 변경과정
 			String today = new SimpleDateFormat("yyMMdd").format(new Date());
-			String saveFolder = uploadPath + File.separator + today;
+
+			String saveFolder = System.getProperty("user.dir") + "/../imgServer" + File.separator + today;
+			
 			log.debug("저장 폴더 : {}", saveFolder);
 			File folder = new File(saveFolder);
 			if (!folder.exists())
