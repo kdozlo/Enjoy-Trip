@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.enjoytrip.model.mapper.PhotoArticleMapper">
+
+	<resultMap type="photoArticleDto" id="photoArticle">
+		<result column="photo_article_id" property="photoArticleId"/>
+		<result column="user_id" property="userId"/>
+		<result column="user_name" property="userName"/>
+		<result column="save_folder" property="saveFolder"/>
+		<result column="original_file" property="originalFile"/>
+		<result column="save_file" property="saveFile"/>
+		<result column="content" property="content"/>
+		<result column="created_time" property="createdTime"/>
+	</resultMap>
+
+	<insert id="writPhotoArticle" parameterType="photoArticleDto">
+		insert into photo_article (user_id, save_folder, original_file, save_file, content)
+		values (#{userId}, #{saveFolder}, #{originalFile},  #{saveFile}, #{content})
+		<selectKey resultType="int" keyProperty="photoArticleId" order="AFTER">
+		select last_insert_id()
+	</selectKey>
+	</insert>
+	
+	<sql id="search">
+		<if test="word != null and word != ''">
+			<if test="key == 'subject'">
+				and subject like concat('%', #{word}, '%')
+			</if>
+			<if test="key != 'subject'">
+				and ${key} = #{word}
+			</if>
+		</if>
+	</sql>
+
+	<select id="listPhotoArticle" parameterType="map" resultMap="photoArticle">
+		select p.photo_article_id, p.user_id, p.content, p.save_folder, p.original_file, p.save_file, p.created_time COALESCE(m.user_name, '(알수 없음)') as user_name
+		from photo_article p left join members m on p.user_id = m.user_id
+		<include refid="search"></include>
+		order by p.photo_article_id desc
+		limit #{start}, #{listsize}
+	</select>
+	
+	<select id="getTotalPhotoArticleCount" parameterType="map" resultType="int">
+		select count(photo_article_id)
+		from photo_article
+		<where>
+			<include refid="search"></include>
+		</where>
+	</select>
+	
+	<update id="modifyPhotoArticle" parameterType="photoArticleDto">
+		update photo_article
+		set content = #{content}
+		where photo_article_id = #{photoArticleId}
+	</update>
+	
+	<delete id="deletePhotoArticle" parameterType="int">
+		delete from photo_article
+		where photo_article_id = #{photoArticleId}
+	</delete>
+
+</mapper>

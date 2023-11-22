@@ -15,10 +15,10 @@ public interface PhotoArticleMapper {
 
 	List<PhotoArticleDto> listPhotoArticle(Map<String, Object> param) throws SQLException;
 
-	int getTotalPhotoArticleDtoCount(Map<String, Object> param) throws SQLException;
+	int getTotalPhotoArticleCount(Map<String, Object> param) throws SQLException;
 
-	void modifyPhotoArticleDto(PhotoArticleDto PpotoArticleDto) throws SQLException;
+	void modifyPhotoArticle(PhotoArticleDto PpotoArticleDto) throws SQLException;
 
-	void deletePhotoArticleDto(int photo_article_id) throws SQLException;
+	void deletePhotoArticle(int photoArticleId) throws SQLException;
 
 }
