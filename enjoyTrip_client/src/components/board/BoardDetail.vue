@@ -3,7 +3,7 @@ import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
 import { useMemberStore } from "@/stores/member";
-import { detailArticle, deleteArticle } from "@/api/board";
+import { detailArticle, deleteArticle, listArticle } from "@/api/board";
 
 const route = useRoute();
 const router = useRouter();
@@ -104,6 +104,7 @@ function onDeleteArticle() {
                             글목록
                         </button>
                         <button
+                            v-show="article.userId === userInfo.userId"
                             type="button"
                             class="btn btn-outline-success mb-3 ms-1"
                             @click="moveModify"
@@ -111,6 +112,7 @@ function onDeleteArticle() {
                             글수정
                         </button>
                         <button
+                            v-show="article.userId === userInfo.userId"
                             type="button"
                             class="btn btn-outline-danger mb-3 ms-1"
                             @click="onDeleteArticle"
