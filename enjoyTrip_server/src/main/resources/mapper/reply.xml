@@ -19,9 +19,9 @@
 	</insert>
 
 	<select id="listReply" parameterType="int" resultMap="reply">
-		select r.reply_id r.article_no, r.user_id, r.content, r.create_time r.push_like, b.article_no
+		select r.reply_id, r.article_no, r.user_id, r.content, r.create_time, r.push_like
 		from reply r, board b
-		where b.user_id = b.article_no
+		where r.article_no = b.article_no
 		order by r.push_like desc
 	</select>
 
