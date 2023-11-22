@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -39,10 +41,11 @@ import lombok.extern.slf4j.Slf4j;
 @Api("포토 게시판 컨트롤러  API V1")
 @Slf4j
 public class PhotoArticleController {
-	
+
+
 	private PhotoArticleService photoArticleService;
 	private JWTUtil jwtUtil;
-	
+
 	public PhotoArticleController(PhotoArticleService photoArticleService, JWTUtil jwtUtil) {
 		super();
 		this.photoArticleService = photoArticleService;
@@ -105,6 +108,6 @@ public class PhotoArticleController {
 			return new ResponseEntity<String>(status);
 		}
 	}
-	
+
 	
 }
