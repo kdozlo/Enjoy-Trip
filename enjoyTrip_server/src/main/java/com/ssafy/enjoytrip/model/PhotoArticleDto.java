@@ -8,6 +8,8 @@ public class PhotoArticleDto {
 	
 
 	private int photoArticleId;
+	
+	private long likesCount;
 
 	private String userId;
 
@@ -26,10 +28,11 @@ public class PhotoArticleDto {
 		// TODO Auto-generated constructor stub
 	}
 
-	public PhotoArticleDto(int photoArticleId, String userId, String content, String createdTime, String saveFolder,
-			String originalFile, String saveFile) {
+	public PhotoArticleDto(int photoArticleId, long likesCount, String userId, String content, String createdTime,
+			String saveFolder, String originalFile, String saveFile) {
 		super();
 		this.photoArticleId = photoArticleId;
+		this.likesCount = likesCount;
 		this.userId = userId;
 		this.content = content;
 		this.createdTime = createdTime;
@@ -37,15 +40,21 @@ public class PhotoArticleDto {
 		this.originalFile = originalFile;
 		this.saveFile = saveFile;
 	}
-
-
-
+	
 	public int getPhotoArticleId() {
 		return photoArticleId;
 	}
 
 	public void setPhotoArticleId(int photoArticleId) {
 		this.photoArticleId = photoArticleId;
+	}
+	
+	public long getLikesCount() {
+		return likesCount;
+	}
+
+	public void setLikesCount(long likes) {
+		this.likesCount = likesCount;
 	}
 
 	public String getUserId() {

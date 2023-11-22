@@ -6,6 +6,7 @@
 
 	<resultMap type="photoArticleDto" id="photoArticle">
 		<result column="photo_article_id" property="photoArticleId"/>
+		<result column="likes_count" property="likesCount"/>
 		<result column="user_id" property="userId"/>
 		<result column="user_name" property="userName"/>
 		<result column="save_folder" property="saveFolder"/>
@@ -35,7 +36,7 @@
 	</sql>
 
 	<select id="listPhotoArticle" parameterType="map" resultMap="photoArticle">
-		select p.photo_article_id, p.user_id, p.content, p.save_folder, p.original_file, p.save_file, p.created_time COALESCE(m.user_name, '(알수 없음)') as user_name
+		select p.photo_article_id, p.likes_count, p.user_id, p.content, p.save_folder, p.original_file, p.save_file, p.created_time COALESCE(m.user_name, '(알수 없음)') as user_name
 		from photo_article p left join members m on p.user_id = m.user_id
 		<include refid="search"></include>
 		order by p.photo_article_id desc

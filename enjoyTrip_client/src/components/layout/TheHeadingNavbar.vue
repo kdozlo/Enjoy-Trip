@@ -25,8 +25,16 @@ const logout = async () => {
     <nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top">
         <div class="container-fluid">
             <div class="d-flex justify-content-start align-items-center">
-                <router-link :to="{ name: 'main' }" class="navbar-brand text-primary fw-bold">
-                    <img src="@/assets/logo.jpg" class="rounded mx-auto" alt="..." width="80" />
+                <router-link
+                    :to="{ name: 'main' }"
+                    class="navbar-brand text-primary fw-bold"
+                >
+                    <img
+                        src="@/assets/logo.jpg"
+                        class="rounded mx-auto"
+                        alt="..."
+                        width="80"
+                    />
                     LikeLike
                 </router-link>
                 <button
@@ -48,13 +56,20 @@ const logout = async () => {
                     style="--bs-scroll-height: 100px"
                 >
                     <li class="nav-item">
-                        <router-link :to="{ name: 'attraction' }" class="nav-link"
+                        <router-link
+                            :to="{ name: 'attraction' }"
+                            class="nav-link"
                             >지역별관광지</router-link
                         >
                     </li>
                     <li class="nav-item">
                         <router-link :to="{ name: 'board' }" class="nav-link"
-                            >여행정보공유</router-link
+                            >포토게시판</router-link
+                        >
+                    </li>
+                    <li class="nav-item">
+                        <router-link :to="{ name: 'board' }" class="nav-link"
+                            >자유게시판</router-link
                         >
                     </li>
                     <li class="nav-item dropdown" style="margin-right: 50px">
@@ -72,10 +87,18 @@ const logout = async () => {
                                 width="20"
                             />
                         </a>
-                        <ul class="dropdown-menu" style="--bs-scroll-height: 100px">
-                            <template v-for="menu in menuList" :key="menu.routeName">
+                        <ul
+                            class="dropdown-menu"
+                            style="--bs-scroll-height: 100px"
+                        >
+                            <template
+                                v-for="menu in menuList"
+                                :key="menu.routeName"
+                            >
                                 <template v-if="menu.show">
-                                    <template v-if="menu.routeName === 'user-logout'">
+                                    <template
+                                        v-if="menu.routeName === 'user-logout'"
+                                    >
                                         <li class="nav-item">
                                             <router-link
                                                 to="/"
