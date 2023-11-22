@@ -8,7 +8,8 @@ const route = useRoute();
 
 const props = defineProps({ type: String });
 
-const isUseId = ref(false);
+const userInfo = ref({});
+userInfo.value = JSON.parse(sessionStorage.getItem("memberStore")).userInfo;
 
 const article = ref({
     articleNo: 0,
@@ -27,13 +28,11 @@ if (props.type === "modify") {
         articleno,
         ({ data }) => {
             article.value = data;
-            isUseId.value = true;
         },
         (error) => {
             console.log(error);
         }
     );
-    isUseId.value = true;
 }
 
 const subjectErrMsg = ref("");
@@ -111,9 +110,8 @@ function moveList() {
             <input
                 type="text"
                 class="form-control"
-                v-model="article.userId"
-                :disabled="isUseId"
-                placeholder="작성자ID..."
+                :value="userInfo.userId"
+                readonly
             />
         </div>
         <div class="mb-3">
