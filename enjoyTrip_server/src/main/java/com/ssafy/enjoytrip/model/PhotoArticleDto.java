@@ -1,11 +1,11 @@
 package com.ssafy.enjoytrip.model;
 
-import java.util.List;
 
-import io.swagger.annotations.ApiModelProperty;
+import lombok.Getter;
 
+
+@Getter
 public class PhotoArticleDto {
-	
 
 	private int photoArticleId;
 	
@@ -40,65 +40,33 @@ public class PhotoArticleDto {
 		this.originalFile = originalFile;
 		this.saveFile = saveFile;
 	}
-	
-	public int getPhotoArticleId() {
-		return photoArticleId;
-	}
 
 	public void setPhotoArticleId(int photoArticleId) {
 		this.photoArticleId = photoArticleId;
-	}
-	
-	public long getLikesCount() {
-		return likesCount;
 	}
 
 	public void setLikesCount(long likes) {
 		this.likesCount = likesCount;
 	}
 
-	public String getUserId() {
-		return userId;
-	}
-
 	public void setUserId(String userId) {
 		this.userId = userId;
-	}
-
-	public String getContent() {
-		return content;
 	}
 
 	public void setContent(String content) {
 		this.content = content;
 	}
 
-	public String getCreatedTime() {
-		return createdTime;
-	}
-
 	public void setCreatedTime(String createdTime) {
 		this.createdTime = createdTime;
-	}
-
-	public String getSaveFolder() {
-		return saveFolder;
 	}
 
 	public void setSaveFolder(String saveFolder) {
 		this.saveFolder = saveFolder;
 	}
 
-	public String getOriginalFile() {
-		return originalFile;
-	}
-
 	public void setOriginalFile(String originalFile) {
 		this.originalFile = originalFile;
-	}
-
-	public String getSaveFile() {
-		return saveFile;
 	}
 
 	public void setSaveFile(String saveFile) {

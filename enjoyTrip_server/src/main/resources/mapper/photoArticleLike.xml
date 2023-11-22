@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.enjoytrip.model.mapper.PhotoArticleLikeMapper">
+
+	<insert id="insert" parameterType="heartDto">
+		insert into photo_likes (user_id, photo_article_id)
+		values (#{userId}, #{photoArticleId})
+	</insert>
+
+	<select id="select" parameterType="heartDto" resultType="int">
+		select count(*) from photo_likes where user_id = #{userId} and photo_article_id = #{photoArticleId}
+	</select>
+
+	<update id="updateup" parameterType="heartDto">
+		update photo_article
+		set likes_count = likes_count + 1
+		where photo_article_id = #{photoArticleId}
+	</update>
+
+	<update id="updatedown" parameterType="heartDto">
+		update photo_article
+		set likes_count = likes_count - 1
+		where photo_article_id = #{photoArticleId}
+	</update>
+
+	<delete id="delete" parameterType="heartDto">
+		delete from photo_likes
+		where photo_article_id = #{photoArticleId} and user_id=#{userId}
+	</delete>
+
+</mapper>
