@@ -137,6 +137,8 @@ public class BoardController {
 	public ResponseEntity<String> modifyArticle(
 			@RequestBody @ApiParam(value = "수정할 글정보.", required = true) BoardDto boardDto ,HttpServletRequest request) throws Exception {
 		HttpStatus status = HttpStatus.ACCEPTED;
+		System.out.println(boardDto);
+		System.out.println(request.getHeader("Authorization"));
 		if (jwtUtil.checkToken(request.getHeader("Authorization"))) { //사용가능한 토큰인지
 			log.info("사용가능 토큰!!!");
 			if(boardDto.getUserId().equals(jwtUtil.getUserId(request.getHeader("Authorization")))) { //비교를 토큰이랑 현재로그인된 아이디랑
@@ -155,7 +157,7 @@ public class BoardController {
 			log.error("로그인이 만료되었습니다!!!");
 			status = HttpStatus.UNAUTHORIZED;
 		}
-		return new ResponseEntity<String>(status);
+		return new ResponseEntity<String>("", status);
 	}
 	
 	@ApiOperation(value = "게시판 글삭제", notes = "글번호에 해당하는 게시글의 정보를 삭제한다. 그리고 DB삭제 성공여부에 따라 'success' 또는 'fail' 문자열을 반환한다.", response = String.class)

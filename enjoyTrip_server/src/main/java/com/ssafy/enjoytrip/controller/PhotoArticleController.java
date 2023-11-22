@@ -52,7 +52,7 @@ public class PhotoArticleController {
 	
 	@PostMapping
 	public ResponseEntity<?> writPhotoArticle(@RequestBody @ApiParam(value = "게시글 정보.", required = true) PhotoArticleDto photoArticleDto
-	,@RequestBody @ApiParam(value = "파일정보.", required = false) MultipartFile file) throws Exception{
+	,@RequestPart @ApiParam(value = "파일정보.", required = false) MultipartFile file) throws Exception{
 		HttpStatus status = HttpStatus.ACCEPTED;
 		log.debug("MultipartFile.isEmpty : {}", file.isEmpty());
 		if (!file.isEmpty()) {

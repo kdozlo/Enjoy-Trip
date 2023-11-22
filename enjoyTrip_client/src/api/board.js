@@ -20,11 +20,13 @@ function getModifyArticle(articleno, success, fail) {
 }
 
 function modifyArticle(article, success, fail) {
+    local.defaults.headers["Authorization"] =
+        sessionStorage.getItem("accessToken");
     local.put(`/board`, JSON.stringify(article)).then(success).catch(fail);
 }
 
-function deleteArticle(articleno, success, fail) {
-    local.delete(`/board/${articleno}`).then(success).catch(fail);
+function deleteArticle(userid, articleno, success, fail) {
+    local.delete(`/board/${userid}/${articleno}`).then(success).catch(fail);
 }
 
 export {
