@@ -43,26 +43,30 @@ const router = createRouter({
                 {
                     path: "join",
                     name: "user-join",
-                    component: () => import("@/components/users/UserRegister.vue"),
+                    component: () =>
+                        import("@/components/users/UserRegister.vue"),
                 },
                 {
                     path: "mypage",
                     name: "user-mypage",
                     beforeEnter: onlyAuthUser,
-                    component: () => import("@/components/users/UserMyPage.vue"),
+                    component: () =>
+                        import("@/components/users/UserMyPage.vue"),
                 },
                 {
                     path: "modify/:userid",
                     name: "user-modify",
                     beforeEnter: onlyAuthUser,
-                    component: () => import("@/components/users/UserModify.vue"),
+                    component: () =>
+                        import("@/components/users/UserModify.vue"),
                 },
             ],
         },
         {
             path: "/attraction",
             name: "attraction",
-            component: () => import("../components/attraction/AttractionList.vue"),
+            component: () =>
+                import("../components/attraction/AttractionList.vue"),
         },
         {
             path: "/board",
@@ -83,19 +87,47 @@ const router = createRouter({
                     path: "view/:articleno",
                     name: "article-view",
                     beforeEnter: onlyAuthUser,
-                    component: () => import("@/components/board/BoardDetail.vue"),
+                    component: () =>
+                        import("@/components/board/BoardDetail.vue"),
                 },
                 {
                     path: "write",
                     name: "article-write",
                     beforeEnter: onlyAuthUser,
-                    component: () => import("@/components/board/BoardWrite.vue"),
+                    component: () =>
+                        import("@/components/board/BoardWrite.vue"),
                 },
                 {
                     path: "modify/:articleno",
                     name: "article-modify",
                     beforeEnter: onlyAuthUser,
-                    component: () => import("@/components/board/BoardModify.vue"),
+                    component: () =>
+                        import("@/components/board/BoardModify.vue"),
+                },
+            ],
+        },
+        {
+            path: "/photo-article",
+            name: "photoArticle",
+            // component: TheBoardView,
+            // route level code-splitting
+            // this generates a separate chunk (About.[hash].js) for this route
+            // which is lazy-loaded when the route is visited.
+            component: () => import("../views/ThePhotoArticleView.vue"),
+            redirect: { name: "photo-article-list" },
+            children: [
+                {
+                    path: "photo-list",
+                    name: "photo-article-list",
+                    component: () =>
+                        import("@/components/photoarticle/PhotoList.vue"),
+                },
+                {
+                    path: "write",
+                    name: "photo-write",
+                    beforeEnter: onlyAuthUser,
+                    component: () =>
+                        import("@/components/photoarticle/PhotoWrite.vue"),
                 },
             ],
         },

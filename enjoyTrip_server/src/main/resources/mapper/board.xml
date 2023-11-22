@@ -54,7 +54,9 @@
 	<select id="listArticle" parameterType="map" resultMap="article">
 		select b.article_no, b.user_id, b.subject, b.content, b.hit, b.register_time, COALESCE(m.user_name, '(알수 없음)') as user_name
 		from board b left join members m on b.user_id = m.user_id
-		<include refid="search"></include>
+		<where>
+			<include refid="search"></include>
+		</where>
 		order by b.article_no desc
 		limit #{start}, #{listsize}
 	</select>
@@ -68,10 +70,9 @@
 	</select>
 	
 	<select id="getArticle" parameterType="int" resultMap="viewArticle">
-		select b.article_no, b.user_id, b.subject, b.content, b.hit, b.register_time, m.user_name 
-		from board b, members m
-		where b.user_id = m.user_id
-		and b.article_no = #{articleNo}
+		select b.article_no, b.user_id, b.subject, b.content, b.hit, b.register_time, m.user_name, COALESCE(m.user_name, '(알수 없음)') as user_name
+		from board b left join members m on b.user_id = m.user_id
+		where b.article_no = #{articleNo}
 	</select>
 	
 	<select id="fileInfoList" resultMap="file">
