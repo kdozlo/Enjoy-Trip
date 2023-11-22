@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.enjoytrip.model.mapper.ReplyMapper">
+
+	<resultMap type="replyDto" id="reply">
+		<result column="reply_id" property="replyId"/>
+		<result column="article_no" property="articleNo"/>
+		<result column="user_id" property="userId"/>
+		<result column="content" property="content"/>
+		<result column="create_time" property="createTime"/>
+		<result column="push_like" property="pushLike"/>
+	</resultMap>
+
+	<insert id="writeReply" parameterType="replyDto">
+		insert into reply (content,user_id,article_no)
+		values (#{content},#{userId},#{articleNo})
+	</insert>
+
+	<select id="listReply" parameterType="int" resultMap="reply">
+		select r.reply_id r.article_no, r.user_id, r.content, r.create_time r.push_like, b.article_no
+		from reply r, board b
+		where b.user_id = b.article_no
+		order by r.push_like desc
+	</select>
+
+	
+	<update id="updateLike" parameterType="int">
+		update reply
+		set push_like = push_like + 1
+		where reply_id = #{replyId}
+	</update>
+	
+	<update id="modifyReply" parameterType="replyDto">
+		update reply
+		set content = #{content}
+		where reply_id = #{replyId}
+	</update>
+	
+	<delete id="deleteReply" parameterType="int">
+		delete from reply
+		where reply_id = #{replyId}
+	</delete>
+
+</mapper>

@@ -6,7 +6,9 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 import com.ssafy.enjoytrip.model.FileInfoDto;
+import com.ssafy.enjoytrip.model.ReplyDto;
 import com.ssafy.enjoytrip.model.service.MemberService;
+import com.ssafy.enjoytrip.model.service.ReplyService;
 import com.ssafy.enjoytrip.util.JWTUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -89,6 +91,7 @@ public class BoardController {
 			return new ResponseEntity<String>(status);
 		}
 	}
+
 
 	@ApiOperation(value = "게시판 글목록", notes = "모든 게시글의 정보를 반환한다.", response = List.class)
 	@ApiResponses({ @ApiResponse(code = 200, message = "회원목록 OK!!"), @ApiResponse(code = 404, message = "페이지없어!!"),
