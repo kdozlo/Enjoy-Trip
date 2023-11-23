@@ -49,7 +49,7 @@ public class BoardController {
 	}
 
 	@ApiOperation(value = "게시판 글작성", notes = "새로운 게시글 정보를 입력한다.")
-	@PostMapping(produces = "text/plain;charset=UTF-8")
+	@PostMapping
 	public ResponseEntity<?> writeArticle(@RequestBody @ApiParam(value = "게시글 정보.", required = true) BoardDto boardDto
 	/*,@RequestBody @ApiParam(value = "파일정보.", required = false) MultipartFile[] files*/) throws Exception{
 
@@ -94,7 +94,7 @@ public class BoardController {
 	@ApiOperation(value = "게시판 글목록", notes = "모든 게시글의 정보를 반환한다.", response = List.class)
 	@ApiResponses({ @ApiResponse(code = 200, message = "회원목록 OK!!"), @ApiResponse(code = 404, message = "페이지없어!!"),
 			@ApiResponse(code = 500, message = "서버에러!!") })
-	@GetMapping(produces = "text/plain;charset=UTF-8")
+	@GetMapping
 	public ResponseEntity<?> listArticle(
 			@RequestParam @ApiParam(value = "게시글을 얻기위한 부가정보.", required = true) Map<String, String> map) {
 		log.info("listArticle map - {}", map);
@@ -123,7 +123,7 @@ public class BoardController {
 	}
 
 	@ApiOperation(value = "수정 할 글 얻기", notes = "글번호에 해당하는 게시글의 정보를 반환한다.")
-	@GetMapping(value="/modify/{articleno}",produces = "text/plain;charset=UTF-8")
+	@GetMapping(value="/modify/{articleno}")
 	public ResponseEntity<BoardDto> getModifyArticle(
 			@PathVariable("articleno") @ApiParam(value = "얻어올 글의 글번호.", required = true) int articleno)
 			throws Exception {
@@ -132,7 +132,7 @@ public class BoardController {
 	}
 
 	@ApiOperation(value = "게시판 글수정", notes = "수정할 게시글 정보를 입력한다. 그리고 DB수정 성공여부에 따라 'success' 또는 'fail' 문자열을 반환한다.", response = String.class)
-	@PutMapping(produces = "text/plain;charset=UTF-8")
+	@PutMapping
 	public ResponseEntity<String> modifyArticle(
 			@RequestBody @ApiParam(value = "수정할 글정보.", required = true) BoardDto boardDto ,HttpServletRequest request) throws Exception {
 		if (jwtUtil.checkToken(request.getHeader("Authorization"))) { //사용가능한 토큰인지
@@ -157,7 +157,7 @@ public class BoardController {
 	}
 	
 	@ApiOperation(value = "게시판 글삭제", notes = "글번호에 해당하는 게시글의 정보를 삭제한다. 그리고 DB삭제 성공여부에 따라 'success' 또는 'fail' 문자열을 반환한다.", response = String.class)
-	@DeleteMapping(value="/{userid}/{articleno}",produces = "text/plain;charset=UTF-8")
+	@DeleteMapping(value="/{userid}/{articleno}")
 	public ResponseEntity<String> deleteArticle(@PathVariable("articleno") @ApiParam(value = "살제할 글의 글번호.", required = true) int articleno,
 												@PathVariable("userid") String userId, HttpServletRequest request) throws Exception {
 		HttpStatus status = HttpStatus.ACCEPTED;

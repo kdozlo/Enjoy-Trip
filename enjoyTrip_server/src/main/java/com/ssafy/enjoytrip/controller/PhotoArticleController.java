@@ -52,7 +52,7 @@ public class PhotoArticleController {
         this.jwtUtil = jwtUtil;
     }
     
-    @PostMapping(produces = "text/plain;charset=UTF-8")
+    @PostMapping
     public ResponseEntity<?> writePhotoArticle(@RequestPart @ApiParam(value = "게시글 정보.", required = true) PhotoArticleDto photoArticleDto
     ,@RequestPart @ApiParam(value = "파일정보.", required = false) MultipartFile file) throws Exception{
         log.debug("MultipartFile.isEmpty : {}", file.isEmpty() );
@@ -91,7 +91,7 @@ public class PhotoArticleController {
         }
     }
     
-    @GetMapping(produces = "text/plain;charset=UTF-8")
+    @GetMapping
     public ResponseEntity<?> listPhotoArticle(
             @RequestParam Map<String, String> map) {
         log.info("listPhotoArticle map - {}", map);

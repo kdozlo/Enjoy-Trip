@@ -28,7 +28,7 @@ public class PhotoArticleLikeController {
     private PhotoArticleLikeService photoArticleLikeService;
     private JWTUtil jwtUtil;
 
-    @PostMapping(produces = "text/plain;charset=UTF-8")
+    @PostMapping
     public ResponseEntity<?> push(
             @RequestBody @ApiParam(value = "포토게시글 정보.", required = true) PhotoArticleDto photoArticleDto,
             HttpServletRequest request) throws Exception {

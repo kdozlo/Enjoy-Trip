@@ -45,7 +45,7 @@ public class ReplyController {
 	}
 
 	@ApiOperation(value = "댓글작성", notes = "글번호에 해당하는 게시글에 댓글작성")
-	@PostMapping(produces = "text/plain;charset=UTF-8")
+	@PostMapping
 	public ResponseEntity<?> writeReply(
 			@RequestBody @ApiParam(value = "댓글 작성 내용.", required = true) ReplyDto replyDto)
 			throws Exception {
@@ -63,7 +63,7 @@ public class ReplyController {
 	}
 
 	@ApiOperation(value = "댓글보기", notes = "글번호에 해당하는 게시글의 댓글들을 반환한다.")
-	@GetMapping(value="/{articleno}",produces = "text/plain;charset=UTF-8")
+	@GetMapping(value="/{articleno}")
 	public ResponseEntity<?> listReply(
 			@PathVariable("articleno") @ApiParam(value = "얻어올 댓글의 글번호.", required = true) int articleno)
 			throws Exception {
@@ -80,7 +80,7 @@ public class ReplyController {
 	}
 
 	@ApiOperation(value = "댓글수정", notes = "수정할 댓글 정보를 입력한다.")
-	@PutMapping(produces = "text/plain;charset=UTF-8")
+	@PutMapping
 	public ResponseEntity<String> modifyReply(
 			@RequestBody @ApiParam(value = "수정할 글정보.", required = true) ReplyDto replyDto ,HttpServletRequest request) throws Exception {
 		if (jwtUtil.checkToken(request.getHeader("Authorization"))) { //사용가능한 토큰인지
@@ -105,7 +105,7 @@ public class ReplyController {
 	}
 
 	@ApiOperation(value = "댓글삭제", notes = "댓글ID에 해당하는 댓글의 정보를 삭제한다.")
-	@DeleteMapping(value="/{userid}/{replyid}",produces = "text/plain;charset=UTF-8")
+	@DeleteMapping(value="/{userid}/{replyid}")
 	public ResponseEntity<String> deleteArticle(@PathVariable("replyid") @ApiParam(value = "삭제할 댓글의 글번호.", required = true) int replyId,
 												@PathVariable("userid") String userId, HttpServletRequest request) throws Exception {
 		if (jwtUtil.checkToken(request.getHeader("Authorization"))) { //사용가능한 토큰인지

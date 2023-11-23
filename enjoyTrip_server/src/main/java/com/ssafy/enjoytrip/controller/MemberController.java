@@ -41,7 +41,7 @@ public class MemberController {
         this.jwtUtil = jwtUtil;
     }
 
-    @PostMapping(value="/join",produces = "text/plain;charset=UTF-8")
+    @PostMapping(value="/join")
     public ResponseEntity<?> join(@RequestBody MemberDto member) {
         System.out.println(member.toString());
         try {
@@ -55,7 +55,7 @@ public class MemberController {
         }
     }
 
-    @GetMapping(value="/{userid}",produces = "text/plain;charset=UTF-8")
+    @GetMapping(value="/{userid}")
     public ResponseEntity<?> idCheck(@PathVariable("userid") String userId) throws Exception {
         int cnt = memberService.idCheck(userId);
         return cnt > 0 ? new ResponseEntity<String>("해당 아이디는 이미 존재 합니다.", HttpStatus.OK) : new ResponseEntity<String>("사용 가능한 아이디 입니다.", HttpStatus.OK);
@@ -126,7 +126,7 @@ public class MemberController {
 
     // 회원 정보 수정
     @ApiOperation(value = "회원정보수정")
-    @PutMapping(value="/updatemember",produces = "text/plain;charset=UTF-8")
+    @PutMapping(value="/updatemember")
     public ResponseEntity<?> update(@RequestBody MemberDto member, HttpServletRequest request) {
         if (jwtUtil.checkToken(request.getHeader("Authorization"))) { //사용가능한 토큰인지
             log.info("사용가능 토큰!!!");
@@ -156,7 +156,7 @@ public class MemberController {
 
     // 회원 정보 탈퇴
     @ApiOperation(value = "회원탈퇴")
-    @DeleteMapping(value="/deletemember",produces = "text/plain;charset=UTF-8")
+    @DeleteMapping(value="/deletemember")
     public ResponseEntity<?> delete(@RequestBody MemberDto member, HttpServletRequest request) {
         HttpStatus status = HttpStatus.ACCEPTED;
         if (jwtUtil.checkToken(request.getHeader("Authorization"))) { //사용가능한 토큰인지
@@ -190,7 +190,7 @@ public class MemberController {
     }
 
     @ApiOperation(value = "로그아웃", notes = "회원 정보를 담은 Token을 제거한다.", response = Map.class)
-    @GetMapping(value="/logout/{userId}",produces = "text/plain;charset=UTF-8")
+    @GetMapping(value="/logout/{userId}")
     public ResponseEntity<?> removeToken(@PathVariable("userId") @ApiParam(value = "로그아웃할 회원의 아이디.", required = true) String userId) {
         Map<String, Object> resultMap = new HashMap<>();
         try {
