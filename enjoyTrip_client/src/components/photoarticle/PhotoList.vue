@@ -29,7 +29,7 @@ const totalPage = ref(0);
 const { VITE_ARTICLE_LIST_SIZE } = import.meta.env;
 const param = ref({
     pgno: currentPage.value,
-    spp: VITE_ARTICLE_LIST_SIZE,
+    spp: 9,
     key: "",
     word: "",
 });
@@ -68,7 +68,7 @@ const moveWrite = () => {
 
 <template>
     <photoWrite v-if="showModal" @close-modal="showModal = false"></photoWrite>
-    <div class="container" style="width: 100vw; height: 80vh">
+    <div class="container" style="width: 100vw; height: 100vh">
         <div class="row justify-content-center">
             <div class="col-lg-10">
                 <h2 class="my-3 py-3 shadow-sm bg-light text-center">
@@ -110,21 +110,23 @@ const moveWrite = () => {
                         </form>
                     </div>
                 </div>
-                <table class="table table-hover">
-                    <tbody>
+                <div class="container-fluid">
+                    <div class="row gy-4 justify-content-center">
                         <PhotoListItem
                             v-for="article in articles"
                             :key="article.photoArticleId"
                             :article="article"
                         ></PhotoListItem>
-                    </tbody>
-                </table>
+                    </div>
+                </div>
             </div>
-            <PageNavigation
-                :current-page="currentPage"
-                :total-page="totalPage"
-                @pageChange="onPageChange"
-            ></PageNavigation>
+            <div class="mt-5">
+                <PageNavigation
+                    :current-page="currentPage"
+                    :total-page="totalPage"
+                    @pageChange="onPageChange"
+                ></PageNavigation>
+            </div>
         </div>
     </div>
 </template>
