@@ -12,6 +12,8 @@ public class PhotoArticleDto {
 	private long likesCount;
 
 	private String userId;
+	
+	private String userName;
 
 	private String content;
 
@@ -28,12 +30,13 @@ public class PhotoArticleDto {
 		// TODO Auto-generated constructor stub
 	}
 
-	public PhotoArticleDto(int photoArticleId, long likesCount, String userId, String content, String createdTime,
-			String saveFolder, String originalFile, String saveFile) {
+	public PhotoArticleDto(int photoArticleId, long likesCount, String userId, String userName, String content,
+			String createdTime, String saveFolder, String originalFile, String saveFile) {
 		super();
 		this.photoArticleId = photoArticleId;
 		this.likesCount = likesCount;
 		this.userId = userId;
+		this.userName = userName;
 		this.content = content;
 		this.createdTime = createdTime;
 		this.saveFolder = saveFolder;
@@ -45,12 +48,16 @@ public class PhotoArticleDto {
 		this.photoArticleId = photoArticleId;
 	}
 
-	public void setLikesCount(long likes) {
+	public void setLikesCount(long likesCount) {
 		this.likesCount = likesCount;
 	}
 
 	public void setUserId(String userId) {
 		this.userId = userId;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
 	public void setContent(String content) {
@@ -73,11 +80,13 @@ public class PhotoArticleDto {
 		this.saveFile = saveFile;
 	}
 
+
 	@Override
 	public String toString() {
 		return "PhotoArticleDto [photoArticleId=" + photoArticleId + ", userId=" + userId + ", content=" + content
 				+ ", createdTime=" + createdTime + ", saveFolder=" + saveFolder + ", originalFile=" + originalFile
 				+ ", saveFile=" + saveFile + "]";
 	}
+	
 
 }

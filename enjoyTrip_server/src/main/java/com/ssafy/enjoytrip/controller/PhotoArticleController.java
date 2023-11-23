@@ -99,6 +99,10 @@ public class PhotoArticleController {
         try {
             
             PhotoArticleListDto photoArticleListDto = photoArticleService.listPhotoArticle(map);
+            
+            for(PhotoArticleDto p : photoArticleListDto.getPhotoArticles()) {
+            	System.out.println(p);
+            }
             HttpHeaders header = new HttpHeaders();
             header.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
             return ResponseEntity.ok().headers(header).body(photoArticleListDto);

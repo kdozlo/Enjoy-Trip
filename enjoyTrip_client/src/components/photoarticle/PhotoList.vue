@@ -10,6 +10,10 @@ import PageNavigation from "@/components/common/PageNavigation.vue";
 
 const router = useRouter();
 
+onMounted(() => {
+    getListPhotoArticle();
+});
+
 const showModal = ref(false);
 
 const selectOption = ref([
@@ -30,33 +34,31 @@ const param = ref({
     word: "",
 });
 
-onMounted(() => {});
-
 const changeKey = (val) => {
     console.log("BoarList에서 선택한 조건 : " + val);
     param.value.key = val;
 };
 
-// const getArticleList = () => {
-//     console.log("서버에서 글목록 얻어오자!!!", param.value);
-//     listArticle(
-//         param.value,
-//         ({ data }) => {
-//             articles.value = data.articles;
-//             currentPage.value = data.currentPage;
-//             totalPage.value = data.totalPageCount;
-//         },
-//         (error) => {
-//             console.log(error);
-//         }
-//     );
-// };
+const getListPhotoArticle = () => {
+    console.log("서버에서 글목록 얻어오자!!!", param.value);
+    listPhotoArticle(
+        param.value,
+        ({ data }) => {
+            articles.value = data.photoArticles;
+            currentPage.value = data.currentPage;
+            totalPage.value = data.totalPageCount;
+        },
+        (error) => {
+            console.log(error);
+        }
+    );
+};
 
 const onPageChange = (val) => {
     console.log(val + "번 페이지로 이동 준비 끝!!!");
     currentPage.value = val;
     param.value.pgno = val;
-    getArticleList();
+    getListPhotoArticle();
 };
 
 const moveWrite = () => {
@@ -112,7 +114,7 @@ const moveWrite = () => {
                     <tbody>
                         <PhotoListItem
                             v-for="article in articles"
-                            :key="article.articleNo"
+                            :key="article.photoArticleId"
                             :article="article"
                         ></PhotoListItem>
                     </tbody>
