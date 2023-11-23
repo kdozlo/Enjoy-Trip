@@ -28,7 +28,7 @@ public class PhotoArticleLikeController {
     private PhotoArticleLikeService photoArticleLikeService;
     private JWTUtil jwtUtil;
 
-    @PostMapping
+    @PostMapping(produces = "text/plain;charset=UTF-8")
     public ResponseEntity<?> push(
             @RequestBody @ApiParam(value = "포토게시글 정보.", required = true) PhotoArticleDto photoArticleDto,
             HttpServletRequest request) throws Exception {
@@ -38,12 +38,15 @@ public class PhotoArticleLikeController {
             heartDto.setUserId(jwtUtil.getUserId(request.getHeader("Authorization")));
             heartDto.setPhotoArticleId(photoArticleDto.getPhotoArticleId());
             log.info(heartDto.toString());
-            photoArticleLikeService.insert(heartDto);
+            int result = photoArticleLikeService.insert(heartDto);
+            if(result == 0){
+                return new ResponseEntity<String>("좋아요 실패",HttpStatus.BAD_REQUEST);
+            }
         } catch (Exception e) {
-            log.error("좋아요 실패 : {}", e);
+            log.error("좋아요 실패", e);
             return new ResponseEntity<String>("Error : " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<String>(HttpStatus.OK);
+        return new ResponseEntity<String>("좋아요 성공",HttpStatus.OK);
     }
 /*
     @DeleteMapping

@@ -11,13 +11,13 @@ import com.ssafy.enjoytrip.model.PhotoArticleDto;
 @Mapper
 public interface PhotoArticleMapper {
 
-	void writPhotoArticle(PhotoArticleDto PpotoArticleDto) throws SQLException;
+	int writePhotoArticle(PhotoArticleDto PhotoArticleDto) throws SQLException;
 
 	List<PhotoArticleDto> listPhotoArticle(Map<String, Object> param) throws SQLException;
 
 	int getTotalPhotoArticleCount(Map<String, Object> param) throws SQLException;
 
-	void modifyPhotoArticle(PhotoArticleDto PpotoArticleDto) throws SQLException;
+	void modifyPhotoArticle(PhotoArticleDto PhotoArticleDto) throws SQLException;
 
 	void deletePhotoArticle(int photoArticleId) throws SQLException;
 

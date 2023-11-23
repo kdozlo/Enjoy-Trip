@@ -26,11 +26,10 @@ public class PhotoArticleServiceImpl implements PhotoArticleService{
 
 	@Override
 	@Transactional
-	public void writPhotoArticle(PhotoArticleDto PpotoArticleDto) throws SQLException {
+	public int writePhotoArticle(PhotoArticleDto PpotoArticleDto) throws SQLException {
 		// TODO Auto-generated method stub
-		photoArticleMapper.writPhotoArticle(PpotoArticleDto);
-		
-	}
+		return photoArticleMapper.writePhotoArticle(PpotoArticleDto);
+    }
 
 	@Override
 	public PhotoArticleListDto listPhotoArticle(Map<String, String> map) throws SQLException {

@@ -8,7 +8,7 @@ import com.ssafy.enjoytrip.model.PhotoArticleListDto;
 
 public interface PhotoArticleService {
 	
-	void writPhotoArticle(PhotoArticleDto PpotoArticleDto) throws SQLException;
+	int writePhotoArticle(PhotoArticleDto PpotoArticleDto) throws SQLException;
 
 	PhotoArticleListDto listPhotoArticle(Map<String, String> map) throws SQLException;
 

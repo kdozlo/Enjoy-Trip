@@ -24,12 +24,12 @@ public class AttractionController {
 	@Autowired
 	AttractionService service;
 	
-	@GetMapping("/sido")
+	@GetMapping(value="/sido")
 	public ResponseEntity<?> listSido() throws Exception{
 		return new ResponseEntity<List<Sido>>(service.listSido(), HttpStatus.OK);
 	}
 	
-	@GetMapping("/gugun")
+	@GetMapping(value="/gugun")
 	public ResponseEntity<?> listGugun(@RequestParam("sido-code") int sidoCode) throws Exception{
 		if (service.selectBySidoCode(sidoCode) == null) {
 			return new ResponseEntity<String>("존재하지 않는 시도코드입니다.", HttpStatus.OK);
@@ -37,7 +37,7 @@ public class AttractionController {
 		return new ResponseEntity<List<Gugun>>(service.listGugun(sidoCode), HttpStatus.OK);
 	}
 
-	@GetMapping("/info")
+	@GetMapping(value="/info")
 	public ResponseEntity<?> listAttractionInfo(@RequestParam("sido-code") int sidoCode, @RequestParam("gugun-code") int gugunCode) throws Exception{
 		if (service.selectBySidoCode(sidoCode) == null) {
 			return new ResponseEntity<String>("존재하지 않는 시도코드입니다.", HttpStatus.OK);
@@ -50,7 +50,7 @@ public class AttractionController {
 		return new ResponseEntity<List<AttractionInfo>>(service.listAttractionInfo(sidoCode, gugunCode), HttpStatus.OK);
 	}
 	
-	@GetMapping("/info/{content-id}")
+	@GetMapping(value="/info/{content-id}")
 	public ResponseEntity<?> attractionInfo(@PathVariable("content-id") int contentId) throws Exception{
 		AttractionInfo attractionInfo = service.attractionInfo(contentId);
 		
@@ -61,7 +61,7 @@ public class AttractionController {
 		return new ResponseEntity<AttractionInfo>(attractionInfo, HttpStatus.OK);
 	}
 	
-	@GetMapping("/description/{content-id}")
+	@GetMapping(value="/description/{content-id}")
 	public ResponseEntity<?> attractionDescription(@PathVariable("content-id") int contentId) throws Exception{
 		AttractionInfo attractionInfo = service.attractionInfo(contentId);
 		

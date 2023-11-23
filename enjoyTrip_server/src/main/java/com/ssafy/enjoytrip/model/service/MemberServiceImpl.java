@@ -41,8 +41,8 @@ public class MemberServiceImpl implements MemberService {
 
 	@Transactional
 	@Override
-	public void updateMember(MemberDto memberDto) throws Exception {
-		memberMapper.updateMember(memberDto);
+	public int updateMember(MemberDto memberDto) throws Exception {
+		return memberMapper.updateMember(memberDto);
 	}
 
 	@Transactional
@@ -62,11 +62,11 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public void saveRefreshToken(String userId, String refreshToken) throws Exception {
+	public int saveRefreshToken(String userId, String refreshToken) throws Exception {
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("userId", userId);
 		map.put("token", refreshToken);
-		memberMapper.saveRefreshToken(map);
+		return memberMapper.saveRefreshToken(map);
 	}
 
 	@Override
@@ -75,11 +75,11 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public void deleRefreshToken(String userId) throws Exception {
+	public int deleRefreshToken(String userId) throws Exception {
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("userId", userId);
 		map.put("token", null);
-		memberMapper.deleteRefreshToken(map);
+		return memberMapper.deleteRefreshToken(map);
 	}
 
 }

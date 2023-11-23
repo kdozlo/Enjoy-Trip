@@ -12,14 +12,14 @@ public interface MemberService {
 
 //	/* Admin */
 	List<MemberDto> listMember() throws Exception;
-	void updateMember(MemberDto memberDto) throws Exception;
+	int updateMember(MemberDto memberDto) throws Exception;
 	int deleteMember(MemberDto memberDto) throws Exception;
 
 	//
 	MemberDto loginMember(MemberDto memberDto) throws Exception;
 	MemberDto userInfo(String userId) throws Exception;
-	void saveRefreshToken(String userId, String refreshToken) throws Exception;
+	int saveRefreshToken(String userId, String refreshToken) throws Exception;
 	Object getRefreshToken(String userId) throws Exception;
-	void deleRefreshToken(String userId) throws Exception;
+	int deleRefreshToken(String userId) throws Exception;
 
 }

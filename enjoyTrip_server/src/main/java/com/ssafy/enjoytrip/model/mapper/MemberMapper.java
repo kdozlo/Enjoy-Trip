@@ -17,13 +17,13 @@ public interface MemberMapper {
 	
 	/* Admin */
 	List<MemberDto> listMember() throws SQLException;
-	void updateMember(MemberDto memberDto) throws SQLException;
+	int updateMember(MemberDto memberDto) throws SQLException;
 	int deleteMember(MemberDto memberDto) throws SQLException;
 
 	//jwt
 	MemberDto userInfo(String userId) throws SQLException;
-	void saveRefreshToken(Map<String, String> map) throws SQLException;
+	int saveRefreshToken(Map<String, String> map) throws SQLException;
 	Object getRefreshToken(String userid) throws SQLException;
-	void deleteRefreshToken(Map<String, String> map) throws SQLException;
+	int deleteRefreshToken(Map<String, String> map) throws SQLException;
 
 }

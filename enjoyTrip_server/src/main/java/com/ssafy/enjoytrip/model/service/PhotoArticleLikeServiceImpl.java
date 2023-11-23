@@ -26,13 +26,13 @@ public class PhotoArticleLikeServiceImpl implements PhotoArticleLikeService{
 	}
 
 	@Override
-	public void insert(HeartDto heartDto) throws Exception {
+	public int insert(HeartDto heartDto) throws Exception {
 		if (photoArticleLikeMapper.select(heartDto) == 0) {
 			photoArticleLikeMapper.insert(heartDto);
-			photoArticleLikeMapper.updateup(heartDto);
+			return photoArticleLikeMapper.updateup(heartDto);
 		} else {
 			photoArticleLikeMapper.delete(heartDto);
-			photoArticleLikeMapper.updatedown(heartDto);
+			return photoArticleLikeMapper.updatedown(heartDto);
 		}
 	}
 /*

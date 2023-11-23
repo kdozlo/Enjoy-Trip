@@ -10,7 +10,7 @@ import java.util.Map;
 
 public interface PhotoArticleLikeService {
 	
-	void insert(HeartDto heartDto) throws Exception;
+	int insert(HeartDto heartDto) throws Exception;
 /*
 	void delete(HeartDto heartDto) throws Exception;
 */

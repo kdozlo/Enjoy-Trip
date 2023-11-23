@@ -49,11 +49,10 @@ public class BoardController {
 	}
 
 	@ApiOperation(value = "게시판 글작성", notes = "새로운 게시글 정보를 입력한다.")
-	@PostMapping
+	@PostMapping(produces = "text/plain;charset=UTF-8")
 	public ResponseEntity<?> writeArticle(@RequestBody @ApiParam(value = "게시글 정보.", required = true) BoardDto boardDto
-	,@RequestBody @ApiParam(value = "파일정보.", required = false) MultipartFile[] files) throws Exception{
-		HttpStatus status = HttpStatus.ACCEPTED;
-		System.out.println("writeArticle boardDto " + boardDto);
+	/*,@RequestBody @ApiParam(value = "파일정보.", required = false) MultipartFile[] files*/) throws Exception{
+
 //		if (!files[0].isEmpty()) {
 //			//파일이름 변경과정
 //			String today = new SimpleDateFormat("yyMMdd").format(new Date());
@@ -85,10 +84,9 @@ public class BoardController {
 		try {
 			boardService.writeArticle(boardDto);
 //			return ResponseEntity.ok().build();
-			return new ResponseEntity<Void>(HttpStatus.CREATED);
+			return new ResponseEntity<String>("게시글 작성 성공.", HttpStatus.OK);
 		} catch (Exception e) {
-			log.error("글작성 실패 : {}", e);
-			return new ResponseEntity<String>(status);
+			return new ResponseEntity<String>("게시글 작성 실패", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -96,10 +94,9 @@ public class BoardController {
 	@ApiOperation(value = "게시판 글목록", notes = "모든 게시글의 정보를 반환한다.", response = List.class)
 	@ApiResponses({ @ApiResponse(code = 200, message = "회원목록 OK!!"), @ApiResponse(code = 404, message = "페이지없어!!"),
 			@ApiResponse(code = 500, message = "서버에러!!") })
-	@GetMapping
+	@GetMapping(produces = "text/plain;charset=UTF-8")
 	public ResponseEntity<?> listArticle(
 			@RequestParam @ApiParam(value = "게시글을 얻기위한 부가정보.", required = true) Map<String, String> map) {
-		HttpStatus status = HttpStatus.ACCEPTED;
 		log.info("listArticle map - {}", map);
 		try {
 			BoardListDto boardListDto = boardService.listArticle(map);
@@ -108,23 +105,25 @@ public class BoardController {
 			return ResponseEntity.ok().headers(header).body(boardListDto);
 		} catch (Exception e) {
 			log.error("글 목록 조회 실패 : {}", e);
-			return new ResponseEntity<String>(status);
+			return new ResponseEntity<String>("게시글 목록 가져오기 실패", HttpStatus.OK);
 		}
 	}
 
-	@ApiOperation(value = "게시판 글보기", notes = "글번호에 해당하는 게시글의 정보를 반환한다.", response = BoardDto.class)
-	@GetMapping("/{articleno}")
-	public ResponseEntity<BoardDto> getArticle(
+	@ApiOperation(value = "게시판 글보기", notes = "글번호에 해당하는 게시글의 정보를 반환한다.")
+	@GetMapping(value="/{articleno}")
+	public ResponseEntity<?> getArticle(
 			@PathVariable("articleno") @ApiParam(value = "얻어올 글의 글번호.", required = true) int articleno)
 			throws Exception {
 		log.info("getArticle - 호출 : " + articleno);
-		boardService.updateHit(articleno);
-		System.out.println(boardService.getArticle(articleno));
+		int result = boardService.updateHit(articleno);
+		if(result == 0){
+			return new ResponseEntity<String>("조회수 증가 실패",HttpStatus.BAD_REQUEST);
+		}
 		return new ResponseEntity<BoardDto>(boardService.getArticle(articleno), HttpStatus.OK);
 	}
 
-	@ApiOperation(value = "수정 할 글 얻기", notes = "글번호에 해당하는 게시글의 정보를 반환한다.", response = BoardDto.class)
-	@GetMapping("/modify/{articleno}")
+	@ApiOperation(value = "수정 할 글 얻기", notes = "글번호에 해당하는 게시글의 정보를 반환한다.")
+	@GetMapping(value="/modify/{articleno}",produces = "text/plain;charset=UTF-8")
 	public ResponseEntity<BoardDto> getModifyArticle(
 			@PathVariable("articleno") @ApiParam(value = "얻어올 글의 글번호.", required = true) int articleno)
 			throws Exception {
@@ -133,12 +132,9 @@ public class BoardController {
 	}
 
 	@ApiOperation(value = "게시판 글수정", notes = "수정할 게시글 정보를 입력한다. 그리고 DB수정 성공여부에 따라 'success' 또는 'fail' 문자열을 반환한다.", response = String.class)
-	@PutMapping
+	@PutMapping(produces = "text/plain;charset=UTF-8")
 	public ResponseEntity<String> modifyArticle(
 			@RequestBody @ApiParam(value = "수정할 글정보.", required = true) BoardDto boardDto ,HttpServletRequest request) throws Exception {
-		HttpStatus status = HttpStatus.ACCEPTED;
-		System.out.println(boardDto);
-		System.out.println(request.getHeader("Authorization"));
 		if (jwtUtil.checkToken(request.getHeader("Authorization"))) { //사용가능한 토큰인지
 			log.info("사용가능 토큰!!!");
 			if(boardDto.getUserId().equals(jwtUtil.getUserId(request.getHeader("Authorization")))) { //비교를 토큰이랑 현재로그인된 아이디랑
@@ -147,21 +143,21 @@ public class BoardController {
 					boardService.modifyArticle(boardDto);
 				} catch (Exception e) {
 					log.error("게시글 수정 실패 : {}", e);
-					status = HttpStatus.INTERNAL_SERVER_ERROR;
+					return new ResponseEntity<String>("게시글 수정 실패", HttpStatus.INTERNAL_SERVER_ERROR);
 				}
 			}else{
 				log.error("토큰과 일치하지 않습니다!!!");
-				status = HttpStatus.BAD_REQUEST;
+				return new ResponseEntity<String>("토큰과 일치하지 않습니다!!!", HttpStatus.BAD_REQUEST);
 			}
 		} else { //사용가능 토큰이 아니면
 			log.error("로그인이 만료되었습니다!!!");
-			status = HttpStatus.UNAUTHORIZED;
+			return new ResponseEntity<String>("로그인이 만료되었습니다!!!", HttpStatus.UNAUTHORIZED);
 		}
-		return new ResponseEntity<String>("", status);
+		return new ResponseEntity<String>("게시글 수정 성공", HttpStatus.OK);
 	}
 	
 	@ApiOperation(value = "게시판 글삭제", notes = "글번호에 해당하는 게시글의 정보를 삭제한다. 그리고 DB삭제 성공여부에 따라 'success' 또는 'fail' 문자열을 반환한다.", response = String.class)
-	@DeleteMapping("/{userid}/{articleno}")
+	@DeleteMapping(value="/{userid}/{articleno}",produces = "text/plain;charset=UTF-8")
 	public ResponseEntity<String> deleteArticle(@PathVariable("articleno") @ApiParam(value = "살제할 글의 글번호.", required = true) int articleno,
 												@PathVariable("userid") String userId, HttpServletRequest request) throws Exception {
 		HttpStatus status = HttpStatus.ACCEPTED;
@@ -172,18 +168,18 @@ public class BoardController {
 					log.info("게시글 삭제 - 호출");
 					boardService.deleteArticle(articleno);
 				} catch (Exception e) {
-					log.error("게시글 삭제 실패 : {}", e);
-					status = HttpStatus.INTERNAL_SERVER_ERROR;
+					log.error("게시글 삭제 실패", e);
+					return new ResponseEntity<String>("게시글 삭제 실패", HttpStatus.INTERNAL_SERVER_ERROR);
 				}
 			}else{
 				log.error("토큰과 일치하지 않습니다!!!");
-				status = HttpStatus.BAD_REQUEST;
+				return new ResponseEntity<String>("토큰과 일치하지 않습니다!!!", HttpStatus.BAD_REQUEST);
 			}
 		} else { //사용가능 토큰이 아니면
 			log.error("로그인이 만료되었습니다!!!");
-			status = HttpStatus.UNAUTHORIZED;
+			return new ResponseEntity<String>("로그인이 만료되었습니다!!!", HttpStatus.UNAUTHORIZED);
 		}
-		return new ResponseEntity<String>(status);
+		return new ResponseEntity<String>("게시글 삭제 성공", HttpStatus.OK);
 	}
 
 	private ResponseEntity<String> exceptionHandling(Exception e) {

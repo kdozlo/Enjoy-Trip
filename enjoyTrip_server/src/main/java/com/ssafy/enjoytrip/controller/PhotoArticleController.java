@@ -52,15 +52,13 @@ public class PhotoArticleController {
         this.jwtUtil = jwtUtil;
     }
     
-    @PostMapping
-    public ResponseEntity<?> writPhotoArticle(@RequestPart @ApiParam(value = "게시글 정보.", required = true) PhotoArticleDto photoArticleDto
+    @PostMapping(produces = "text/plain;charset=UTF-8")
+    public ResponseEntity<?> writePhotoArticle(@RequestPart @ApiParam(value = "게시글 정보.", required = true) PhotoArticleDto photoArticleDto
     ,@RequestPart @ApiParam(value = "파일정보.", required = false) MultipartFile file) throws Exception{
-        HttpStatus status = HttpStatus.ACCEPTED;
-        log.debug("MultipartFile.isEmpty : {}", file.isEmpty());
+        log.debug("MultipartFile.isEmpty : {}", file.isEmpty() );
         if (!file.isEmpty()) {
             //파일이름 변경과정
             String today = new SimpleDateFormat("yyMMdd").format(new Date());
-
             String saveFolder = System.getProperty("user.dir") + "/../imgServer" + File.separator + today;
             
             log.debug("저장 폴더 : {}", saveFolder);
@@ -82,24 +80,25 @@ public class PhotoArticleController {
         }
 
         try {
-            photoArticleService.writPhotoArticle(photoArticleDto);
-
-            return new ResponseEntity<Void>(HttpStatus.CREATED);
+            int result = photoArticleService.writePhotoArticle(photoArticleDto);
+            if(result == 0){
+                return new ResponseEntity<String>("글작성 오류",HttpStatus.BAD_REQUEST);
+            }
+            return new ResponseEntity<String>("글작성 성공",HttpStatus.CREATED);
         } catch (Exception e) {
             log.error("글작성 실패 : {}", e);
-            return new ResponseEntity<Void>(status);
+            return new ResponseEntity<String>("글작성 실패",HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     
-    @GetMapping
+    @GetMapping(produces = "text/plain;charset=UTF-8")
     public ResponseEntity<?> listPhotoArticle(
             @RequestParam Map<String, String> map) {
-        HttpStatus status = HttpStatus.ACCEPTED;
         log.info("listPhotoArticle map - {}", map);
         try {
-            
             PhotoArticleListDto photoArticleListDto = photoArticleService.listPhotoArticle(map);
-            
+            if(photoArticleListDto == null)
+                return new ResponseEntity<String>("List 반환값 없음",HttpStatus.BAD_REQUEST);
             for(PhotoArticleDto p : photoArticleListDto.getPhotoArticles()) {
             	System.out.println(p);
             }
@@ -108,7 +107,7 @@ public class PhotoArticleController {
             return ResponseEntity.ok().headers(header).body(photoArticleListDto);
         } catch (Exception e) {
             log.error("글 목록 조회 실패 : {}", e);
-            return new ResponseEntity<String>(status);
+            return new ResponseEntity<String>("글목록 조회 실패",HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

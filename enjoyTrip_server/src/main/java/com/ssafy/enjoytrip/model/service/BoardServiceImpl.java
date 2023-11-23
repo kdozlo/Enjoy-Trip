@@ -28,10 +28,14 @@ public class BoardServiceImpl implements BoardService {
 	@Transactional
 	public void writeArticle(BoardDto boardDto) throws Exception {
 		boardMapper.writeArticle(boardDto);
+		/*
+		//파일업로드
 		List<FileInfoDto> fileInfos = boardDto.getFileInfos();
 		if (fileInfos != null && !fileInfos.isEmpty()) {
 			boardMapper.registerFile(boardDto);
 		}
+		*/
+
 	}
 
 	@Override
@@ -98,8 +102,8 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public void updateHit(int articleNo) throws Exception {
-		boardMapper.updateHit(articleNo);
+	public int updateHit(int articleNo) throws Exception {
+		return boardMapper.updateHit(articleNo);
 	}
 
 	@Override

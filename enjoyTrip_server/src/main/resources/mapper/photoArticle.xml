@@ -16,7 +16,7 @@
 		<result column="created_time" property="createdTime"/>
 	</resultMap>
 
-	<insert id="writPhotoArticle" parameterType="photoArticleDto">
+	<insert id="writePhotoArticle" parameterType="photoArticleDto">
 		insert into photo_article (user_id, save_folder, original_file, save_file, content)
 		values (#{userId}, #{saveFolder}, #{originalFile},  #{saveFile}, #{content})
 		<selectKey resultType="int" keyProperty="photoArticleId" order="AFTER">

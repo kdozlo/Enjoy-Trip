@@ -45,11 +45,10 @@ public class ReplyController {
 	}
 
 	@ApiOperation(value = "댓글작성", notes = "글번호에 해당하는 게시글에 댓글작성")
-	@PostMapping
+	@PostMapping(produces = "text/plain;charset=UTF-8")
 	public ResponseEntity<?> writeReply(
 			@RequestBody @ApiParam(value = "댓글 작성 내용.", required = true) ReplyDto replyDto)
 			throws Exception {
-		HttpStatus status = HttpStatus.ACCEPTED;
 		log.info(replyDto.getContent());
 		log.info("writeReply - 호출 : {}" + replyDto.getArticleNo());
 		log.info(replyDto.getUserId());
@@ -58,17 +57,16 @@ public class ReplyController {
 			replyService.writeReply(replyDto);
 		} catch (Exception e) {
 			log.error("댓글작성 실패 : {}", e);
-			return new ResponseEntity<String>(status);
+			return new ResponseEntity<String>("댓글작성 실패",HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		return new ResponseEntity<String>(status);
+		return new ResponseEntity<String>("댓글작성 성공",HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "댓글보기", notes = "글번호에 해당하는 게시글의 댓글들을 반환한다.")
-	@GetMapping("/{articleno}")
+	@GetMapping(value="/{articleno}",produces = "text/plain;charset=UTF-8")
 	public ResponseEntity<?> listReply(
 			@PathVariable("articleno") @ApiParam(value = "얻어올 댓글의 글번호.", required = true) int articleno)
 			throws Exception {
-		HttpStatus status = HttpStatus.ACCEPTED;
 		log.info("listReply - 호출 : " + articleno);
 		try {
 			List<ReplyDto> replys= replyService.listReply(articleno);
@@ -77,16 +75,14 @@ public class ReplyController {
 			return ResponseEntity.ok().headers(header).body(replys);
 		} catch (Exception e) {
 			log.error("글 목록 조회 실패 : {}", e);
-			status = HttpStatus.INTERNAL_SERVER_ERROR;
-			return new ResponseEntity<String>(status);
+			return new ResponseEntity<String>("글 목록 조회 실패 : {}",HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
 	@ApiOperation(value = "댓글수정", notes = "수정할 댓글 정보를 입력한다.")
-	@PutMapping
+	@PutMapping(produces = "text/plain;charset=UTF-8")
 	public ResponseEntity<String> modifyReply(
 			@RequestBody @ApiParam(value = "수정할 글정보.", required = true) ReplyDto replyDto ,HttpServletRequest request) throws Exception {
-		HttpStatus status = HttpStatus.ACCEPTED;
 		if (jwtUtil.checkToken(request.getHeader("Authorization"))) { //사용가능한 토큰인지
 			log.info("사용가능 토큰!!!");
 			if(replyDto.getUserId().equals(jwtUtil.getUserId(request.getHeader("Authorization")))) { //비교를 토큰이랑 현재로그인된 아이디랑
@@ -95,24 +91,23 @@ public class ReplyController {
 					replyService.modifyReply(replyDto);
 				} catch (Exception e) {
 					log.error("댓글 수정 실패 : {}", e);
-					status = HttpStatus.INTERNAL_SERVER_ERROR;
+					return new ResponseEntity<String>("댓글 수정 실패",HttpStatus.INTERNAL_SERVER_ERROR);
 				}
 			}else{
 				log.error("토큰과 일치하지 않습니다!!!");
-				status = HttpStatus.BAD_REQUEST;
+				return new ResponseEntity<String>("토큰과 일치하지 않습니다!!!",HttpStatus.BAD_REQUEST);
 			}
 		} else { //사용가능 토큰이 아니면
 			log.error("로그인이 만료되었습니다!!!");
-			status = HttpStatus.UNAUTHORIZED;
+			return new ResponseEntity<String>("로그인이 만료되었습니다!!!",HttpStatus.UNAUTHORIZED);
 		}
-		return new ResponseEntity<String>(status);
+		return new ResponseEntity<String>("댓글 수정 성공",HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "댓글삭제", notes = "댓글ID에 해당하는 댓글의 정보를 삭제한다.")
-	@DeleteMapping("/{userid}/{replyid}")
+	@DeleteMapping(value="/{userid}/{replyid}",produces = "text/plain;charset=UTF-8")
 	public ResponseEntity<String> deleteArticle(@PathVariable("replyid") @ApiParam(value = "삭제할 댓글의 글번호.", required = true) int replyId,
 												@PathVariable("userid") String userId, HttpServletRequest request) throws Exception {
-		HttpStatus status = HttpStatus.ACCEPTED;
 		if (jwtUtil.checkToken(request.getHeader("Authorization"))) { //사용가능한 토큰인지
 			log.info("사용가능 토큰!!!");
 			if(userId.equals(jwtUtil.getUserId(request.getHeader("Authorization")))) { //비교를 토큰이랑 현재로그인된 아이디랑
@@ -121,19 +116,18 @@ public class ReplyController {
 					replyService.deleteReply(replyId);
 				} catch (Exception e) {
 					log.error("댓글 삭제 실패 : {}", e);
-					status = HttpStatus.INTERNAL_SERVER_ERROR;
+					return new ResponseEntity<String>("댓글 삭제 실패",HttpStatus.INTERNAL_SERVER_ERROR);
 				}
 			}else{
 				log.error("토큰과 일치하지 않습니다!!!");
-				status = HttpStatus.BAD_REQUEST;
+				return new ResponseEntity<String>("토큰과 일치하지 않습니다!!!",HttpStatus.BAD_REQUEST);
 			}
 		} else { //사용가능 토큰이 아니면
 			log.error("로그인이 만료되었습니다!!!");
-			status = HttpStatus.UNAUTHORIZED;
+			return new ResponseEntity<String>("로그인이 만료되었습니다!!!",HttpStatus.UNAUTHORIZED);
 		}
-		return new ResponseEntity<String>(status);
+		return new ResponseEntity<String>("댓글 삭제 성공",HttpStatus.OK);
 	}
-
 
 	private ResponseEntity<String> exceptionHandling(Exception e) {
 		e.printStackTrace();
