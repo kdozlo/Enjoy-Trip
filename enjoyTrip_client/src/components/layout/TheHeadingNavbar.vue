@@ -29,13 +29,14 @@ const logout = async () => {
                     :to="{ name: 'main' }"
                     class="navbar-brand text-primary fw-bold"
                 >
+                    <span>Kmarble </span>
                     <img
-                        src="@/assets/logo.jpg"
-                        class="rounded mx-auto"
+                        src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Travel%20and%20places/Globe%20Showing%20Europe-Africa.png"
                         alt="..."
-                        width="80"
+                        width="60"
+                        height="60"
                     />
-                    LikeLike
+                    <span> LikeLike</span>
                 </router-link>
                 <button
                     class="navbar-toggler"
@@ -129,4 +130,15 @@ const logout = async () => {
     </nav>
 </template>
 
-<style scoped></style>
+<style scoped>
+span {
+    position: relative;
+    top: 8px;
+    display: inline-block;
+    font-size: 50px;
+    color: #4f89db;
+    text-shadow: 0 1px 0 #ccc, 0 2px 0 #ccc, 0 3px 0 #ccc, 0 4px 0 #ccc,
+        0 5px 0 #ccc, 0 6px 0 transparent, 0 7px 0 transparent,
+        0 8px 0 transparent, 0 9px 0 transparent, 0 10px 10px rgba(0, 0, 0, 0.4);
+}
+</style>
