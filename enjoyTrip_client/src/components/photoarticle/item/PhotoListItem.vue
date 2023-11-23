@@ -29,6 +29,7 @@ console.log("imgUrl - ", imgUrl.value);
         <div class="card-body">
             <p class="card-text">작성자 : {{ props.article.userName }}</p>
             <p class="card-text">내용 : {{ props.article.content }}</p>
+            <p class="card-text">❤️ : {{ props.article.likesCount }}</p>
         </div>
     </div>
 </template>
