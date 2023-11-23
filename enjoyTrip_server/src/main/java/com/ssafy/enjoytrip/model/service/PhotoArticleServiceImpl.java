@@ -60,6 +60,15 @@ public class PhotoArticleServiceImpl implements PhotoArticleService{
 		
 		return photoArticleListDto;
 	}
+	@Override
+	public PhotoArticleListDto bestListPhotoArticle() throws SQLException {
+		List<PhotoArticleDto> list = photoArticleMapper.bestListPhotoArticle();
+		
+		PhotoArticleListDto photoArticleListDto = new PhotoArticleListDto();
+		photoArticleListDto.setPhotoArticles(list);
+		
+		return photoArticleListDto; 
+	}
 
 	@Override
 	@Transactional

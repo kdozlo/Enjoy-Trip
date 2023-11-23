@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
-import { listPhotoArticle } from "@/api/photoArticle.js";
+import { listPhotoArticle, bestListPhotoArticle } from "@/api/photoArticle.js";
 import photoWrite from "@/components/photoarticle/PhotoWrite.vue";
 
 import VSelect from "@/components/common/VSelect.vue";
@@ -18,7 +18,6 @@ const showModal = ref(false);
 
 const selectOption = ref([
     { text: "검색조건", value: "" },
-    { text: "글번호", value: "article_no" },
     { text: "내용", value: "content" },
     { text: "작성자아이디", value: "user_id" },
 ]);
@@ -113,7 +112,7 @@ const moveWrite = () => {
                                 <button
                                     class="btn btn-outline-success"
                                     type="button"
-                                    @click="getArticleList"
+                                    @click="getListPhotoArticle"
                                 >
                                     검색
                                 </button>

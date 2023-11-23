@@ -11,6 +11,8 @@ public interface PhotoArticleService {
 	int writePhotoArticle(PhotoArticleDto PpotoArticleDto) throws SQLException;
 
 	PhotoArticleListDto listPhotoArticle(Map<String, String> map) throws SQLException;
+	
+	PhotoArticleListDto bestListPhotoArticle() throws SQLException;
 
 	void modifyPhotoArticle(PhotoArticleDto PpotoArticleDto) throws SQLException;
 

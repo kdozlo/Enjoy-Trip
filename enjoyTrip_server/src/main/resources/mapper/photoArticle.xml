@@ -26,8 +26,8 @@
 	
 	<sql id="search">
 		<if test="word != null and word != ''">
-			<if test="key == 'subject'">
-				and subject like concat('%', #{word}, '%')
+			<if test="key == 'content'">
+				and ${key} like concat('%', #{word}, '%')
 			</if>
 			<if test="key != 'subject'">
 				and ${key} = #{word}
@@ -38,7 +38,9 @@
 	<select id="listPhotoArticle" parameterType="map" resultMap="photoArticle">
 		select p.photo_article_id, p.likes_count, p.user_id, p.content, p.save_folder, p.original_file, p.save_file, p.created_time, COALESCE(m.user_name, '(알수 없음)') as user_name
 		from photo_article p left join members m on p.user_id = m.user_id
-		<include refid="search"></include>
+		<where>
+			<include refid="search"></include>
+		</where>
 		order by p.photo_article_id desc
 		limit #{start}, #{listsize}
 	</select>
@@ -49,6 +51,13 @@
 		<where>
 			<include refid="search"></include>
 		</where>
+	</select>
+	
+	<select id="bestListPhotoArticle" resultMap="photoArticle">
+		select p.photo_article_id, p.likes_count, p.user_id, p.content, p.save_folder, p.original_file, p.save_file, p.created_time, COALESCE(m.user_name, '(알수 없음)') as user_name
+		from photo_article p left join members m on p.user_id = m.user_id
+		order by p.likes_count desc
+		limit 3
 	</select>
 	
 	<update id="modifyPhotoArticle" parameterType="photoArticleDto">

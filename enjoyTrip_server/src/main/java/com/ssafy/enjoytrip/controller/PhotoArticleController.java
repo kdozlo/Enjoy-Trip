@@ -110,6 +110,26 @@ public class PhotoArticleController {
             return new ResponseEntity<String>("글목록 조회 실패",HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    
+    @GetMapping("/best")
+    public ResponseEntity<?> bestListPhotoArticle(
+           ) {
+       
+        try {
+            PhotoArticleListDto photoArticleListDto = photoArticleService.bestListPhotoArticle();
+            if(photoArticleListDto == null)
+                return new ResponseEntity<String>("List 반환값 없음",HttpStatus.BAD_REQUEST);
+            for(PhotoArticleDto p : photoArticleListDto.getPhotoArticles()) {
+            	System.out.println(p);
+            }
+            HttpHeaders header = new HttpHeaders();
+            header.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+            return ResponseEntity.ok().headers(header).body(photoArticleListDto);
+        } catch (Exception e) {
+            log.error("글 목록 조회 실패 : {}", e);
+            return new ResponseEntity<String>("글목록 조회 실패",HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
     
 }

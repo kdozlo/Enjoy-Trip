@@ -1,7 +1,32 @@
-<script setup></script>
+<script setup>
+import { ref, onMounted } from "vue";
+import { bestListPhotoArticle } from "@/api/photoArticle.js";
+import PhotoListItem from "@/components/photoarticle/item/PhotoListItem.vue";
+
+const bestarticles = ref([]);
+
+onMounted(() => {
+    getBestListPhotoArticle();
+});
+
+const getBestListPhotoArticle = () => {
+    bestListPhotoArticle(
+        ({ data }) => {
+            console.log("data.photoArticles - ", data.photoArticles);
+            bestarticles.value = data.photoArticles;
+        },
+        (error) => {
+            console.log(error);
+            bestarticles.value = error.data.photoArticles;
+        }
+    );
+};
+
+console.log("bestarticles - ", bestarticles.value);
+</script>
 
 <template>
-    <div class="container text-center mt-3" style="width: 100vw; height: 80vh">
+    <div class="container text-center mt-3" style="width: 100vw">
         <div>
             <h1>
                 <span>여</span>
@@ -18,6 +43,19 @@
         </div>
         <img src="@/assets/main.jpg" class="img-fluid mx-auto d-block" />
 
+        <div class="mt-5">
+            <h4 class="text-secondary">[ 포토 게시판 인기글 ]</h4>
+        </div>
+
+        <div class="container-fluid">
+            <div class="row gy-4 justify-content-center">
+                <PhotoListItem
+                    v-for="article in bestarticles"
+                    :key="article.photoArticleId"
+                    :article="article"
+                ></PhotoListItem>
+            </div>
+        </div>
         <router-view></router-view>
     </div>
 </template>

@@ -14,6 +14,8 @@ public interface PhotoArticleMapper {
 	int writePhotoArticle(PhotoArticleDto PhotoArticleDto) throws SQLException;
 
 	List<PhotoArticleDto> listPhotoArticle(Map<String, Object> param) throws SQLException;
+	
+	List<PhotoArticleDto> bestListPhotoArticle() throws SQLException;
 
 	int getTotalPhotoArticleCount(Map<String, Object> param) throws SQLException;
 

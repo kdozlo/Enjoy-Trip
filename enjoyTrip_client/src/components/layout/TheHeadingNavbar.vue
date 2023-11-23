@@ -60,6 +60,7 @@ const logout = async () => {
                         <router-link
                             :to="{ name: 'attraction' }"
                             class="nav-link"
+                            style="color: #4f89db"
                             >지역별관광지</router-link
                         >
                     </li>
@@ -67,11 +68,15 @@ const logout = async () => {
                         <router-link
                             :to="{ name: 'photoArticle' }"
                             class="nav-link"
+                            style="color: #4f89db"
                             >포토게시판</router-link
                         >
                     </li>
                     <li class="nav-item">
-                        <router-link :to="{ name: 'board' }" class="nav-link"
+                        <router-link
+                            :to="{ name: 'board' }"
+                            class="nav-link"
+                            style="color: #4f89db"
                             >자유게시판</router-link
                         >
                     </li>
