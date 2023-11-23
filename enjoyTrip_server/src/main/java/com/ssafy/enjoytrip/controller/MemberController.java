@@ -169,8 +169,13 @@ public class MemberController {
             if(member.getUserId().equals(jwtUtil.getUserId(request.getHeader("Authorization")))) { //비교를 토큰이랑 현재로그인된 아이디랑
                 log.info("회원탈퇴 가능!!!");
                 try {
-                    memberService.deleteMember(member);
+                    int result = memberService.deleteMember(member);
                     log.info("회원탈퇴 완료!!!");
+                    if(result == 0) {
+                    	status = HttpStatus.BAD_REQUEST;
+                    	return new ResponseEntity<String>("회원 탈퇴가 실패 했습니.", status);
+                    }
+                    	
                     return new ResponseEntity<String>("회원 탈퇴 되었습니다.", status);
                 } catch (Exception e) {
                     log.error("회원탈퇴 실패 : {}", e);

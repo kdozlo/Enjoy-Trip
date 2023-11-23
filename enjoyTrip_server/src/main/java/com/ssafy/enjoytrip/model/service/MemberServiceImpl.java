@@ -47,8 +47,8 @@ public class MemberServiceImpl implements MemberService {
 
 	@Transactional
 	@Override
-	public void deleteMember(MemberDto memberDto) throws Exception {
-		memberMapper.deleteMember(memberDto);		
+	public int deleteMember(MemberDto memberDto) throws Exception {
+		return memberMapper.deleteMember(memberDto);		
 	}
 
 	@Override

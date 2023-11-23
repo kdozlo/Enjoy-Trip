@@ -21,11 +21,11 @@ const loginUser = ref({
 const removeUser = async () => {
     //user delete
     console.log("removeUser - ", loginUser.value);
-
+    let msg;
     await deleteUser(
         { data: loginUser.value },
         (response) => {
-            let msg = "회원탈퇴 과정에서 문제가 생겼습니다.";
+            msg = "회원탈퇴 과정에서 문제가 생겼습니다.";
             if (loginUser.value.userPwd === "")
                 msg = "비밀번호를 입력해 주세요.";
             console.log(response);
@@ -44,7 +44,11 @@ const removeUser = async () => {
             }
             alert(msg);
         },
-        (error) => console.log(error)
+        (error) => {
+            console.log(error);
+            msg = "회원 정보가 잘못 되었습니다.";
+            alert(msg);
+        }
     );
 };
 </script>

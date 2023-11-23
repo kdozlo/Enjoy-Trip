@@ -13,7 +13,7 @@ public interface MemberService {
 //	/* Admin */
 	List<MemberDto> listMember() throws Exception;
 	void updateMember(MemberDto memberDto) throws Exception;
-	void deleteMember(MemberDto memberDto) throws Exception;
+	int deleteMember(MemberDto memberDto) throws Exception;
 
 	//
 	MemberDto loginMember(MemberDto memberDto) throws Exception;
