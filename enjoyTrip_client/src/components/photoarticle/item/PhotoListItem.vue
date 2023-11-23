@@ -1,25 +1,35 @@
 <script setup>
 import { ref } from "vue";
-defineProps({ article: Object });
-
-console.log("hihi", article.value);
+const props = defineProps({ article: Object });
+console.log("photolistitem - ", props.article);
 
 const imgUrl = ref("");
+// imgUrl.value =
+//     "@/../../imgServer/" +
+//     props.article.saveFolder +
+//     "/" +
+//     props.article.saveFile;
+
 imgUrl.value =
-    "@/../imgServer/" + article.value.saveFolder + "/" + article.value.saveFile;
+    "/@fs/Users/kdozlo/Documents/ssafy/enjoy-trip-kmarble/imgServer/" +
+    props.article.saveFolder +
+    "/" +
+    props.article.saveFile;
+console.log("imgUrl - ", imgUrl.value);
 </script>
 
 <template>
     <div class="card" style="width: 18rem">
         <img
-            src="@/../../imgServer/231123/ad09d9f5-5b15-4acc-a9ea-2c71c825ce29.png"
+            v-if="imgUrl"
+            referrerpolicy="no-referrer"
+            :src="imgUrl"
             class="card-img-top"
-            alt="..."
         />
-        <!-- <img :src="imgUrl" class="card-img-top" alt="..." /> -->
         <div class="card-body">
             <p class="card-text">
-                {{ article.content }}
+                {{ imgUrl }}
+                {{ props.article.content }}
             </p>
         </div>
     </div>
