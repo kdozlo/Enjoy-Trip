@@ -25,7 +25,7 @@ export const useMemberStore = defineStore(
                 (response) => {
                     // console.log("login ok!!!!", response.status);
                     // console.log("login ok!!!!", httpStatusCode.CREATE);
-                    if (response.status === httpStatusCode.CREATE) {
+                    if (response.status === 200) {
                         let { data } = response;
                         // console.log("data", data);
                         let accessToken = data["access-token"];

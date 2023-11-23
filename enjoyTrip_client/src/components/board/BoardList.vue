@@ -70,13 +70,13 @@ const moveWrite = () => {
                 <h2 class="my-3 py-3 text-center">
                     <div class="container text-center mt-3">
                         <h1>
+                            <span>자</span>
+                            <span>유</span>
+                            <span>&nbsp;</span>
                             <span>게</span>
                             <span>시</span>
-                            <span>글</span>
+                            <span>판</span>
                             <span>&nbsp;</span>
-                            <span>작</span>
-                            <span>성</span>
-                            <span>해</span>
                             <span>봐</span>
                             <span>요</span>
                             <span>.</span>

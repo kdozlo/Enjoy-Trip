@@ -272,7 +272,6 @@ const moveModal = () => {
                                 v-for="attraction in attractionList"
                                 :key="attraction.contentid"
                                 :attraction="attraction"
-                                @click="getAttraction(attraction)"
                             >
                                 <td v-if="attraction.firstimage != ''">
                                     <img
@@ -286,10 +285,10 @@ const moveModal = () => {
                                         style="width: 100px"
                                     />
                                 </td>
-                                <td>
+                                <td @click="getAttraction(attraction)">
                                     {{ attraction.title }}
                                 </td>
-                                <td>
+                                <td @click="getAttraction(attraction)">
                                     {{ attraction.addr1 }}
                                 </td>
                             </tr>

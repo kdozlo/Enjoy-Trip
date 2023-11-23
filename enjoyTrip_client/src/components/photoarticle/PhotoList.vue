@@ -68,7 +68,7 @@ const moveWrite = () => {
 
 <template>
     <photoWrite v-if="showModal" @close-modal="showModal = false"></photoWrite>
-    <div class="container" style="width: 100vw; height: 100vh">
+    <div class="container" style="width: 100vw">
         <div class="row justify-content-center">
             <div class="col-lg-10">
                 <div class="container text-center mt-3">

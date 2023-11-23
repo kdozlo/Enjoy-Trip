@@ -195,9 +195,7 @@ public class MemberController {
         Map<String, Object> resultMap = new HashMap<>();
         try {
             int result = memberService.deleRefreshToken(userId);
-            if(result ==0){
-                return new ResponseEntity<String>("토큰 삭제 실패", HttpStatus.BAD_REQUEST);
-            }
+          
         } catch (Exception e) {
             log.error("로그아웃 실패 : {}", e);
             resultMap.put("message", e.getMessage());

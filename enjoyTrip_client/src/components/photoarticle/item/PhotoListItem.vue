@@ -27,9 +27,8 @@ console.log("imgUrl - ", imgUrl.value);
             class="card-img-top"
         />
         <div class="card-body">
-            <p class="card-text">
-                {{ props.article.content }}
-            </p>
+            <p class="card-text">작성자 : {{ props.article.userName }}</p>
+            <p class="card-text">내용 : {{ props.article.content }}</p>
         </div>
     </div>
 </template>

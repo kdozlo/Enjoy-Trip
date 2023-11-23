@@ -62,8 +62,9 @@ function onSubmit() {
         (response) => {
             let msg = "글등록 처리시 문제 발생했습니다.";
             if (response.status == 201) msg = "글등록이 완료되었습니다.";
-            getlistPhotoArticle();
+            console.log(msg);
             alert(msg);
+            router.go();
         },
         (error) => console.log(error)
     );

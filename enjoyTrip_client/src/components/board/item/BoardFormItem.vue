@@ -15,7 +15,7 @@ const article = ref({
     articleNo: 0,
     subject: "",
     content: "",
-    userId: "",
+    userId: userInfo.value.userId,
     userName: "",
     hit: 0,
     registerTime: "",
@@ -76,7 +76,7 @@ function writeArticle() {
         article.value,
         (response) => {
             let msg = "글등록 처리시 문제 발생했습니다.";
-            if (response.status == 201) msg = "글등록이 완료되었습니다.";
+            if (response.status == 200) msg = "글등록이 완료되었습니다.";
             alert(msg);
             moveList();
         },

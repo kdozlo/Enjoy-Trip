@@ -109,12 +109,14 @@ const router = createRouter({
         {
             path: "/photo-article",
             name: "photoArticle",
+            beforeEnter: onlyAuthUser,
             component: () => import("../views/ThePhotoArticleView.vue"),
             redirect: { name: "photo-article-list" },
             children: [
                 {
                     path: "photo-list",
                     name: "photo-article-list",
+                    beforeEnter: onlyAuthUser,
                     component: () =>
                         import("@/components/photoarticle/PhotoList.vue"),
                 },
