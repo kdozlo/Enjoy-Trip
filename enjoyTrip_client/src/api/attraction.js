@@ -7,11 +7,24 @@ function areaCode1(param, success, fail) {
 }
 
 function areaBasedList1(param, success, fail) {
-    attraction.get(`/areaBasedList1`, { params: param }).then(success).catch(fail);
+    attraction
+        .get(`/areaBasedList1`, { params: param })
+        .then(success)
+        .catch(fail);
 }
 
 function searchKeyword1(param, success, fail) {
-    attraction.get(`/searchKeyword1`, { params: param }).then(success).catch(fail);
+    attraction
+        .get(`/searchKeyword1`, { params: param })
+        .then(success)
+        .catch(fail);
 }
 
-export { areaCode1, areaBasedList1, searchKeyword1 };
+function detailCommon1(param, success, fail) {
+    attraction
+        .get(`/detailCommon1`, { params: param })
+        .then(success)
+        .catch(fail);
+}
+
+export { areaCode1, areaBasedList1, searchKeyword1, detailCommon1 };

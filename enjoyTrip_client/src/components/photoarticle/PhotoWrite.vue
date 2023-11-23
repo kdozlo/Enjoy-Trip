@@ -14,7 +14,7 @@ const photoArticle = ref({
     content: "",
     file: null,
 });
-0;
+
 onMounted(() => {
     async (to, from, next) => {
         const memberStore = useMemberStore();

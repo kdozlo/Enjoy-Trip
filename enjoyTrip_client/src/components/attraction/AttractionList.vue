@@ -1,10 +1,10 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { areaCode1 } from "@/api/attraction.js";
-import { areaBasedList1 } from "@/api/attraction.js";
-import { searchKeyword1 } from "@/api/attraction.js";
+import { areaBasedList1, searchKeyword1 } from "@/api/attraction.js";
 import VKakaoMap from "@/components/common/VKakaoMap.vue";
 import PageNavigation from "@/components/common/PageNavigation.vue";
+import attractionDetail from "@/components/attraction/AttractionDetail.vue";
 
 const { VITE_ATTRACTION_API_SERVICE_KEY } = import.meta.env;
 
@@ -139,10 +139,24 @@ const onSearchChage = () => {
 
 const getAttraction = (attraction) => {
     selectStation.value = attraction;
+    console.log("getAttraction - ", selectStation.value);
+    moveModal();
+};
+
+const showModal = ref(false);
+
+const moveModal = () => {
+    showModal.value = true;
+    console.log("moveModal - ", selectStation.value);
 };
 </script>
 
 <template>
+    <attractionDetail
+        v-if="showModal"
+        :selectStation="selectStation"
+        @close-modal="showModal = false"
+    ></attractionDetail>
     <div class="container">
         <div class="row justify-content-center">
             <div class="container text-center mt-3">
@@ -260,14 +274,24 @@ const getAttraction = (attraction) => {
                                 :attraction="attraction"
                                 @click="getAttraction(attraction)"
                             >
-                                <td>
+                                <td v-if="attraction.firstimage != ''">
                                     <img
                                         :src="attraction.firstimage"
                                         style="width: 100px"
                                     />
                                 </td>
-                                <td>{{ attraction.title }}</td>
-                                <td>{{ attraction.addr1 }}</td>
+                                <td v-else>
+                                    <img
+                                        src="@/assets/no-image-removebg.png "
+                                        style="width: 100px"
+                                    />
+                                </td>
+                                <td>
+                                    {{ attraction.title }}
+                                </td>
+                                <td>
+                                    {{ attraction.addr1 }}
+                                </td>
                             </tr>
                         </tbody>
                     </table>
