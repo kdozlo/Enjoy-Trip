@@ -90,7 +90,7 @@ function updateArticle() {
         article.value,
         (response) => {
             let msg = "글수정 처리시 문제 발생했습니다.";
-            if (response.status == 202) msg = "글정보 수정이 완료되었습니다.";
+            if (response.status == 200) msg = "글정보 수정이 완료되었습니다.";
             alert(msg);
             moveList();
         },
