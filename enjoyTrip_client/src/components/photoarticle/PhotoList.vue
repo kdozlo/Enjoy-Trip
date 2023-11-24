@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
-import { listPhotoArticle, bestListPhotoArticle } from "@/api/photoArticle.js";
+import { listPhotoArticle } from "@/api/photoArticle.js";
 import photoWrite from "@/components/photoarticle/PhotoWrite.vue";
 
 import VSelect from "@/components/common/VSelect.vue";
@@ -28,7 +28,7 @@ const totalPage = ref(0);
 const { VITE_ARTICLE_LIST_SIZE } = import.meta.env;
 const param = ref({
     pgno: currentPage.value,
-    spp: 9,
+    spp: 6,
     key: "",
     word: "",
 });

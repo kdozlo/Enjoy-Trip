@@ -15,4 +15,18 @@ function writePhotoArticle(article, success, fail) {
     local.defaults.headers["Content-Type"] = "multipart/form-data";
     local.post(`/photoarticle`, article).then(success).catch(fail);
 }
-export { listPhotoArticle, writePhotoArticle, bestListPhotoArticle };
+
+function photoarticlelikes(article, success, fail) {
+    local.defaults.headers["Authorization"] =
+        sessionStorage.getItem("accessToken");
+    local
+        .post(`/photoarticlelikes`, JSON.stringify(article))
+        .then(success)
+        .catch(fail);
+}
+export {
+    listPhotoArticle,
+    writePhotoArticle,
+    bestListPhotoArticle,
+    photoarticlelikes,
+};

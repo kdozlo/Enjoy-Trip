@@ -1,7 +1,17 @@
 <script setup>
 import { ref } from "vue";
+import { useRouter } from "vue-router";
+import { useMemberStore } from "@/stores/member";
+import { photoarticlelikes } from "@/api/photoArticle.js";
+import { storeToRefs } from "pinia";
+
 const props = defineProps({ article: Object });
 console.log("photolistitem - ", props.article);
+
+const router = useRouter();
+
+const memberStore = useMemberStore();
+const { userInfo } = storeToRefs(memberStore);
 
 const imgUrl = ref("");
 // imgUrl.value =
@@ -16,6 +26,20 @@ imgUrl.value =
     "/" +
     props.article.saveFile;
 console.log("imgUrl - ", imgUrl.value);
+
+const clickHeart = () => {
+    photoarticlelikes(
+        {
+            userId: userInfo.value.userId,
+            photoArticleId: props.article.photoArticleId,
+        },
+        ({ data }) => {},
+        (error) => {
+            console.log(error);
+        }
+    );
+    router.go();
+};
 </script>
 
 <template>
@@ -25,6 +49,7 @@ console.log("imgUrl - ", imgUrl.value);
             referrerpolicy="no-referrer"
             :src="imgUrl"
             class="card-img-top"
+            @click="clickHeart"
         />
         <div class="card-body">
             <p class="card-text">작성자 : {{ props.article.userName }}</p>
